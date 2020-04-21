@@ -2,6 +2,7 @@ package file;
 
 import java.util.Scanner;
 import linkedlist.*;
+import game.Word;
 
 public class Read {
     String puzzlePath, solutionPath, wordPath, highscorePath;
