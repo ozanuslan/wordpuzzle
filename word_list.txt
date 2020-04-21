@@ -1,0 +1,97 @@
+mirroring,ikizleme
+semiconductor,yarıiletken
+cluster,küme
+disconnect,bağlantıyı kesmek
+supplemental,tamamlayıcı
+window,pencere
+keyboard,klavye
+texture,doku
+compatibility,uyumluluk
+mainframe,anabilgisayar
+document,belgelemek
+freehand,serbest el
+reboot,sistemi yeniden yüklemek
+plural,çoğul
+chip,yonga
+limit,sınır
+disable,seçilemez kılmak
+replace,yerine koymak
+protect,korumak
+debugging,yanlış ayıklama
+dither,titremek
+live,canlı
+indentation,girintili yazma
+contact,değmek
+capacity,sığa
+abstract,soyut
+touch,dokunmak
+controller,denetleyici
+branch,şube
+diagram,çizge
+broadcast,yayımlamak
+plug,fiş
+clause,yantümce
+configurator,konfigürasyon tanımlayıcı
+installation,kuruluş
+matrix,dizey
+nucleus,çekirdek
+commit,üstlenmek
+screen,ekran
+supervisor,gözetici
+illegal,geçersiz
+indent,girintili yazmak
+definite,kesin
+increment,artma miktarı
+cybernetics,güdümbilim
+belt,kuşak
+magenta,macenta
+hint,ipucu
+outline,ana çizgiler
+cryptography,şifreleme
+slack,serbestlik
+sense,algılamak
+existing,varolan
+perforated,delikli
+interprocess,süreçler arası
+restore,geri yüklemek
+start,başla
+recovery,kurtarma
+latch,mandal
+viewpoint,bakış açısı
+header,sayfa başlığı
+demodulator,kip çözücü
+corequisite,yankoşul
+tick,imlemek
+effective,geçerli olan
+choice,seçim
+prototype,ön ürün
+command,komut
+branching,dallanma
+mechanism,düzenek
+time,zaman
+intervention,araya girme
+tip,fiş ucu
+user,kullanıcı
+supersede,yerini almak
+minor,küçük
+all,tümü
+identity,özdeşlik
+en-dash,orta çizgi
+percent,yüzde
+appendix,ek
+symbol,simge
+subject,özne
+buffering,arabelleğe alma
+paragraph,paragraf
+decipher,şifre çözmek
+consecutive,ardışık
+owner,sahip
+generator,üreteç
+bandwidth,bant genişliği
+inventory,stok
+assembler,çevirici
+demount,bağlantıyı kaldırma
+interval,aralık
+sight,görüş
+initialize,ilklendirmek
+list,listelemek

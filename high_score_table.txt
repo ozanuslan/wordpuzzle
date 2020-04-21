@@ -1,0 +1,10 @@
+Emre;100
+Tuğçe;90
+Ezgi;80
+Osman;60
+Deniz;50
+Serkan;45
+Mustafa;40
+Aydan;40
+Gizem;35
+Ender;30
