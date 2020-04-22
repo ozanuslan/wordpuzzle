@@ -56,9 +56,15 @@ public class Board {
                 } else if (board[i][j].equals("0")) {
                     Console.print("█");
                 } else {
-                    Console.print(board[i][j]);
+                    Console.print(board[i][j].toUpperCase());
                 }
             }
+        }
+    }
+
+    public void setElementAt(int x, int y, String element) {
+        if (x >= 0 && x < Board.ROWLENGTH && y >= 0 && y < ROWCOUNT) {
+            board[y][x] = element;
         }
     }
 }
