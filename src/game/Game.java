@@ -41,7 +41,7 @@ public class Game {
             px++;
         } else if (intKey == KeyEvent.VK_SPACE) {
             System.exit(0);
-        } else if (intKey > 64 && intKey < 91) {
+        } else if (intKey > 64 && intKey < 91) { // Key press between A-Z
             puzzle.setElementAt(px, py, Character.toString(charKey));
         }
     }
