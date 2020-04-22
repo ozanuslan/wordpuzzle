@@ -85,29 +85,4 @@ public class DLL {
         }
         return size;
     }
-
-    public void swap(int x) {
-        x -= 1;
-        Node temp = head;
-        Object mem1 = null;
-        Object mem2 = null;
-
-        for (int i = 0; i < x; i++) {
-            temp = temp.getNext();
-        }
-        mem1 = temp.getData();
-        temp = tail;
-
-        for (int i = 0; i < x; i++) {
-            temp = temp.getPrev();
-        }
-        mem2 = temp.getData();
-        temp.setData(mem1);
-
-        temp = head;
-        for (int i = 0; i < x; i++) {
-            temp = temp.getNext();
-        }
-        temp.setData(mem2);
-    }
 }
