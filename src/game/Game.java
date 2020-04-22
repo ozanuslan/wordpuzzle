@@ -39,14 +39,22 @@ public class Game {
             px--;
         } else if (intKey == KeyEvent.VK_RIGHT && px < Board.ROWLENGTH - 1) {
             px++;
-        } else if(intKey == KeyEvent.VK_SPACE){
+        } else if (intKey == KeyEvent.VK_SPACE) {
             System.exit(0);
+        } else if (intKey > 64 && intKey < 91) {
+            puzzle.setElementAt(px, py, Character.toString(charKey));
         }
     }
 
     private void printCursor(int px, int py) {
         Console.setCursorPosition(px + 1, py + 1);
-        Console.print(puzzle.getBoard()[py][px], Console.blackongreen);
+        if(puzzle.getBoard()[py][px].equals("0")){
+            Console.print("█", Console.greenonblack);
+        } else if(puzzle.getBoard()[py][px].equals("1")){
+            Console.print("█", Console.greenonblack);
+        } else{
+            Console.print(puzzle.getBoard()[py][px].toUpperCase(), Console.blackongreen);
+        }
     }
 
     public void run() throws InterruptedException {
