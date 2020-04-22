@@ -28,5 +28,9 @@ public class Console {
 
     public static void print(String str, TextAttributes t) {
         c.getTextWindow().output(str, t);
-    }  
+    } 
+
+    public static void setCursorPosition(int x, int y){
+        c.getTextWindow().setCursorPosition(x, y);
+    }
 }
