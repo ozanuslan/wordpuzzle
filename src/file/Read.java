@@ -11,25 +11,18 @@ import game.Board;
 
 public class Read {
 
-    public static String[][] readBoard(String puzzlePath) {
+    public static String[][] readBoard(String boardPath) {
         String[][] board = new String[Board.ROWCOUNT][Board.ROWLENGTH];
         try {
-            File puzzle = new File(puzzlePath);
+            File puzzle = new File(boardPath);
             Scanner sc = new Scanner(puzzle);
             for (int i = 0; i < Board.ROWCOUNT; i++) {
                 String[] row = sc.nextLine().split("");
                 if (row.length == Board.ROWLENGTH) {
-                    for(int j = 0; j < row.length; j++){
-                        if(row[j].equals("1")){
-                            row[j] = " ";
-                        } else if(row[j].equals("0")){
-                            row[j] = "█";
-                        }
-                    }
                     board[i] = row;
                 } else {
                     Scanner exit = new Scanner(System.in);
-                    System.out.println("Incorrect length of row on line " + (i + 1) + ".");
+                    System.out.println(boardPath+" has incorrect row length on line " + (i + 1) + ".");
                     System.out.println("The program cannot continue without a proper puzzle.");
                     exit.nextLine();
                     exit.close();
@@ -53,11 +46,6 @@ public class Read {
         }
 
         return null;
-    }
-
-    public static String[][] readSolution(String solutionPath){
-        String[][] solution = new String[Board.ROWCOUNT][Board.ROWLENGTH];
-        return solution;
     }
 
     public static SLL readSolutionWordList(String solutionPath){
