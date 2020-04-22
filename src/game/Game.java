@@ -1,16 +1,25 @@
 package game;
 
+import file.Read;
 import linkedlist.*;
 
 public class Game {
-    Board b;
+    Board puzzle;
+    Board solution;
+    SLL solutionWordList;
+    MLL wordList;
+    DLL highScoreTable;
 
-    public Game(String puzzlePath) {
-        Console.getConsole("H", 60, 30, 15, 1);
-        b = new Board(puzzlePath);
+    public Game(String puzzlePath, String solutionPath, String wordPath, String highscorePath) {
+        Console.getConsole("Word-Puzzle", 60, 30, 15, 1);
+        puzzle = new Board(puzzlePath);
+        solution = new Board(solutionPath);
+        solutionWordList = Read.readSolutionWordList(solutionPath);
+        wordList = Read.readWordList(wordPath);
+        highScoreTable = Read.readHighScoreTable(highscorePath);
     }
 
     public void run() {
-        b.displayBoard(0, 0, true);
+        puzzle.displayBoard(0, 0, true);
     }
 }
