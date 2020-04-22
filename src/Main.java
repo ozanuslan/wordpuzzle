@@ -1,7 +1,7 @@
 import game.Game;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Game g = new Game("puzzle.txt", "solution.txt", "word_list.txt", "high_score_table.txt");
         g.run();
     }
