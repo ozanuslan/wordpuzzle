@@ -49,6 +49,7 @@ public class Read {
     }
 
     public static SLL readSolutionWordList(String solutionPath){
+        Board solution = new Board(solutionPath);
         SLL solutionWordList = new SLL();
         return solutionWordList;
     }
