@@ -65,7 +65,7 @@ public class MLL {
 
     private OuterNode head;
 
-    MLL() {
+    public MLL() {
         head = null;
     }
 
