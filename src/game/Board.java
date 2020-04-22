@@ -39,8 +39,8 @@ public class Board {
     }
 
     public void displayBoard(int x, int y, boolean hasDisplayFrame) {
-        int rowCount = board.length;
-        int colCount;
+        int rowCount = Board.ROWCOUNT;
+        int colCount = Board.ROWLENGTH;
         int offset;
         if (hasDisplayFrame) {
             offset = 1;
@@ -49,7 +49,6 @@ public class Board {
             offset = 0;
         }
         for (int i = 0; i < rowCount; i++) {
-            colCount = board[i].length;
             for (int j = 0; j < colCount; j++) {
                 Console.setCursorPosition(x + j + offset, y + i + offset);
                 if (board[i][j].equals("1")) {
