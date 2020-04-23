@@ -136,28 +136,4 @@ public class SLL {
 
         return count;
     }
-
-    public void barGraph() {
-        SLL uniqueNodes = findUniqueNodes();
-        int size = size();
-        Node temp = head;
-        Object data;
-        int nodeCount;
-        for (int i = 0; i < size; i++) {
-            data = temp.getData();
-
-            if (uniqueNodes.search(data)) {
-                nodeCount = count(data);
-                System.out.print(data + " ");
-                for (int j = 0; j < nodeCount; j++) {
-                    System.out.print("*");
-                }
-                System.out.println();
-
-                uniqueNodes.delete(data);
-            }
-
-            temp = temp.getLink();
-        }
-    }
 }
