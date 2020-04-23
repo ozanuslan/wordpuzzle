@@ -52,7 +52,7 @@ public class Read {
         return null;
     }
 
-    //TODO: Create a trace algorithm for finding words on the board
+    //TODO: Create a trace algorithm to find words on the solution board
     public static SLL readSolutionWordList(String solutionPath) {
         Board solution = new Board(solutionPath);
         SLL solutionWordList = new SLL();
