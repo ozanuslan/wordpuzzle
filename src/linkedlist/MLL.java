@@ -1,5 +1,7 @@
 package linkedlist;
 
+import enigma.console.TextAttributes;
+import game.Console;
 import game.Word;
 
 public class MLL {
@@ -251,14 +253,30 @@ public class MLL {
         if (head != null) {
             OuterNode oTemp = head;
             while (oTemp != null) {
-                System.out.print(oTemp.getData() + "--> ");
+                Console.print(oTemp.getData() + " --> ");
                 InnerNode iTemp = oTemp.getRight();
                 while (iTemp != null) {
-                    System.out.print(iTemp.getData() + " ");
+                    Console.print(((Word) iTemp.getData()).getWord() + " ");
                     iTemp = iTemp.getNext();
                 }
                 oTemp = oTemp.getDown();
-                System.out.println();
+                Console.println("");
+            }
+        }
+    }
+
+    public void display(TextAttributes t) {
+        if (head != null) {
+            OuterNode oTemp = head;
+            while (oTemp != null) {
+                Console.print(oTemp.getData() + " --> ", t);
+                InnerNode iTemp = oTemp.getRight();
+                while (iTemp != null) {
+                    Console.print(((Word) iTemp.getData()).getWord() + " ", t);
+                    iTemp = iTemp.getNext();
+                }
+                oTemp = oTemp.getDown();
+                Console.println("");
             }
         }
     }
