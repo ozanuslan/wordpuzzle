@@ -1,8 +1,6 @@
 package game;
 
 import enigma.core.Enigma;
-import enigma.event.TextMouseEvent;
-import enigma.event.TextMouseListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import enigma.console.TextAttributes;
