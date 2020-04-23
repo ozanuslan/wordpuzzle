@@ -1,32 +1,35 @@
 package linkedlist;
 
+import enigma.console.TextAttributes;
+import game.Console;
+
 public class SLL {
     public class Node {
         private Object data;
         private Node link;
-    
-        public Node(Object data){
+
+        public Node(Object data) {
             this.data = data;
             link = null;
         }
-    
+
         public Object getData() {
             return data;
         }
-    
+
         public void setData(Object data) {
             this.data = data;
         }
-    
+
         public Node getLink() {
             return link;
         }
-    
+
         public void setLink(Node link) {
             this.link = link;
         }
     }
-    
+
     private Node head;
 
     public SLL() {
@@ -50,7 +53,7 @@ public class SLL {
 
     public void delete(Object data) {
         if (head != null) {
-            while (head != null && head.getData() == data){
+            while (head != null && head.getData() == data) {
                 head = head.getLink();
             }
 
@@ -73,10 +76,19 @@ public class SLL {
         if (head != null) {
             Node temp = head;
             while (temp != null) {
-                System.out.print(temp.getData()+" ");
+                Console.print(temp.getData() + " ");
                 temp = temp.getLink();
             }
-            System.out.println();
+        }
+    }
+
+    public void display(TextAttributes t) {
+        if (head != null) {
+            Node temp = head;
+            while (temp != null) {
+                Console.print(temp.getData() + " ", t);
+                temp = temp.getLink();
+            }
         }
     }
 
