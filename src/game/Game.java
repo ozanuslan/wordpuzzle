@@ -14,7 +14,7 @@ public class Game {
     int px, py;
 
     public Game(String puzzlePath, String solutionPath, String wordPath, String highscorePath) throws Exception {
-        Console.getConsole("Word-Puzzle", 60, 30, 18, 2);
+        Console.getConsole("Word-Puzzle", 80, 30, 22, 2);
         Console.setup();
         puzzle = new Board(puzzlePath);
         solution = new Board(solutionPath);
@@ -57,11 +57,14 @@ public class Game {
 
     public void run() throws InterruptedException {
         puzzle.displayBoard(0, 0, true);
+        solution.displayBoard(17, 0, true);
         while (true) {
             puzzle.displayBoard(1, 1, false);
             printCursor(px, py);
             takeKeyPress();
             Thread.sleep(20);
         }
+        // wordList.display(Console.greenonblack);
+        // highScoreTable.displayFromHead(0,0);
     }
 }
