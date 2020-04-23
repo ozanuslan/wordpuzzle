@@ -8,22 +8,25 @@ import linkedlist.*;
 import game.Word;
 import game.User;
 import game.Board;
+import game.Console;
 
 public class Read {
+    private static final int DICTIONARYLIMIT = 100;
 
     public static String[][] readBoard(String boardPath) {
         String[][] board = new String[Board.ROWCOUNT][Board.ROWLENGTH];
         try {
-            File puzzle = new File(boardPath);
-            Scanner sc = new Scanner(puzzle);
+            Scanner sc = new Scanner(new File(boardPath));
             for (int i = 0; i < Board.ROWCOUNT; i++) {
                 String[] row = sc.nextLine().split("");
                 if (row.length == Board.ROWLENGTH) {
                     board[i] = row;
                 } else {
                     Scanner exit = new Scanner(System.in);
-                    System.out.println(boardPath+" has incorrect row length on line " + (i + 1) + ".");
-                    System.out.println("The program cannot continue without a proper puzzle.");
+                    Console.println(boardPath + " has incorrect row length on line " + (i + 1) + ".",
+                            Console.redonblack);
+                    Console.println("The program cannot continue without a proper "
+                            + boardPath.substring(0, boardPath.indexOf(".")) + ".", Console.redonblack);
                     exit.nextLine();
                     exit.close();
                     System.exit(1);
@@ -33,13 +36,13 @@ public class Read {
             return board;
         } catch (FileNotFoundException e) {
             Scanner sc = new Scanner(System.in);
-            System.out.println(e);
+            Console.println(e.toString(), Console.redonblack);
             sc.nextLine();
             sc.close();
             System.exit(1);
         } catch (Exception e) {
             Scanner sc = new Scanner(System.in);
-            System.out.println("Possibly incorrect amount of rows.");
+            Console.println("Possibly incorrect amount of rows.", Console.redonblack);
             sc.nextLine();
             sc.close();
             System.exit(1);
@@ -48,18 +51,51 @@ public class Read {
         return null;
     }
 
-    public static SLL readSolutionWordList(String solutionPath){
+    //TODO: Create a trace algorithm for words on the board
+    public static SLL readSolutionWordList(String solutionPath) {
         Board solution = new Board(solutionPath);
         SLL solutionWordList = new SLL();
         return solutionWordList;
     }
 
-    public static MLL readWordList(String wordPath){
+    public static MLL readWordList(String wordPath) {
         MLL wordList = new MLL();
+        try {
+            Scanner sc = new Scanner(new File(wordPath));
+            int lineCount = 0;
+            String[] word;
+            SLL errorLines = new SLL();
+            while (sc.hasNextLine()) {
+                lineCount++;
+                if (lineCount > DICTIONARYLIMIT) {
+                    Console.setCursorPosition(0, 20);
+                    Console.print("Dictionary word limit has been exceed, words coming after the " + DICTIONARYLIMIT
+                            + "th word will not be included in the game.", Console.redonblack);
+                    break;
+                }
+                word = sc.nextLine().split(",");
+                if (word.length != 2) {
+                    errorLines.insert(lineCount);
+                } else {
+                    if (word[0].length() < 2 || word[1].length() < 2) {
+                        errorLines.insert(lineCount);
+                    } else {
+                        //TODO: insert words with alphabetical order (function must be in MLL class)
+                        wordList.addWordAlphabetically(new Word(word[0].toLowerCase(), word[1]));
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            Scanner sc = new Scanner(System.in);
+            Console.println(e.toString(), Console.redonblack);
+            sc.nextLine();
+            sc.close();
+            System.exit(1);
+        }
         return wordList;
     }
 
-    public static DLL readHighScoreTable(String highscorePath){
+    public static DLL readHighScoreTable(String highscorePath) {
         DLL highScoreTable = new DLL();
         return highScoreTable;
     }
