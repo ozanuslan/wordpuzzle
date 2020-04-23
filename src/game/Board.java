@@ -64,7 +64,7 @@ public class Board {
 
     public void setElementAt(int x, int y, String element) {
         if (x >= 0 && x < Board.ROWLENGTH && y >= 0 && y < ROWCOUNT) {
-            if(!board[y][x].equals("0")){
+            if(board[y][x].equals("1")){
                 board[y][x] = element;
             }
         }
