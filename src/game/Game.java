@@ -5,16 +5,16 @@ import linkedlist.*;
 import java.awt.event.KeyEvent;
 
 public class Game {
-    Board puzzle;
-    Board solution;
-    SLL solutionWordList;
-    MLL wordList;
-    DLL highScoreTable;
+    private Board puzzle;
+    private Board solution;
+    private SLL solutionWordList;
+    private MLL wordList;
+    private DLL highScoreTable;
 
     int px, py;
 
     public Game(String puzzlePath, String solutionPath, String wordPath, String highscorePath) throws Exception {
-        Console.getConsole("Word-Puzzle", 60, 30, 30, 1);
+        Console.getConsole("Word-Puzzle", 60, 30, 18, 2);
         Console.setup();
         puzzle = new Board(puzzlePath);
         solution = new Board(solutionPath);
@@ -42,17 +42,15 @@ public class Game {
         } else if (intKey == KeyEvent.VK_SPACE) {
             System.exit(0);
         } else if (intKey > 64 && intKey < 91) { // Key press between A-Z
-            puzzle.setElementAt(px, py, Character.toString(charKey));
+            puzzle.setElementAt(px, py, Character.toString(charKey).toLowerCase());
         }
     }
 
     private void printCursor(int px, int py) {
         Console.setCursorPosition(px + 1, py + 1);
-        if(puzzle.getBoard()[py][px].equals("0")){
+        if (puzzle.getBoard()[py][px].equals("0") || puzzle.getBoard()[py][px].equals("1")) {
             Console.print("█", Console.greenonblack);
-        } else if(puzzle.getBoard()[py][px].equals("1")){
-            Console.print("█", Console.greenonblack);
-        } else{
+        } else {
             Console.print(puzzle.getBoard()[py][px].toUpperCase(), Console.blackongreen);
         }
     }
