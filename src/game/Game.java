@@ -18,7 +18,7 @@ public class Game {
         Console.setup();
         puzzle = new Board(puzzlePath);
         solution = new Board(solutionPath);
-        solutionWordList = Read.readSolutionWordList(solutionPath);
+        solutionWordList = Read.readSolutionWordList(solutionPath, puzzlePath);
         wordList = Read.readWordList(wordPath);
         highScoreTable = Read.readHighScoreTable(highscorePath);
 
