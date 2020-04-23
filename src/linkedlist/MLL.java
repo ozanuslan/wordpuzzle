@@ -1,5 +1,7 @@
 package linkedlist;
 
+import game.Word;
+
 public class MLL {
     class InnerNode {
         private Object data;
@@ -77,17 +79,34 @@ public class MLL {
         this.head = head;
     }
 
+    public void addWordAlphabetically(Word word) {
+        if (!hasOuter(word.getWord().charAt(0))) {
+            addOuterNode(word.getWord().charAt(0));
+            addInnerNode(word.getWord().charAt(0), word);
+        } else {
+            if (!hasInner(word.getWord().charAt(0), word)) {
+                addInnerNode(word.getWord().charAt(0), word);
+            }
+        }
+    }
+
     public void addOuterNode(Object data) {
         if (head == null) {
             OuterNode newNode = new OuterNode(data);
             head = newNode;
         } else {
             OuterNode temp = head;
-            while (temp.getDown() != null) {
-                temp = temp.getDown();
-            }
             OuterNode newNode = new OuterNode(data);
-            temp.setDown(newNode);
+            if ((char) data < (char) temp.getData()) {
+                newNode.setDown(temp);
+                head = newNode;
+            } else {
+                while (temp.getDown() != null && (char) data > (char) temp.getDown().getData()) {
+                    temp = temp.getDown();
+                }
+                newNode.setDown(temp.getDown());
+                temp.setDown(newNode);
+            }
         }
     }
 
@@ -95,20 +114,71 @@ public class MLL {
         if (head != null) {
             OuterNode oTemp = head;
             while (oTemp != null) {
-                if (outerData == oTemp.getData()) {
+                if ((char) outerData == (char) oTemp.getData()) {
                     InnerNode iTemp = oTemp.getRight();
                     InnerNode newNode = new InnerNode(innerData);
                     if (iTemp == null) {
                         oTemp.setRight(newNode);
                     } else {
-                        while (iTemp.getNext() != null) {
-                            iTemp = iTemp.getNext();
+                        if ((((Word) innerData).getWord()).compareTo(((Word) iTemp.getData()).getWord()) < 0) {
+                            newNode.setNext(iTemp);
+                            oTemp.setRight(newNode);
+                        } else {
+                            while (iTemp.getNext() != null && (((Word) innerData).getWord())
+                                    .compareTo(((Word) iTemp.getNext().getData()).getWord()) > 0) {
+                                iTemp = iTemp.getNext();
+                            }
+
+                            newNode.setNext(iTemp.getNext());
+                            iTemp.setNext(newNode);
                         }
-                        iTemp.setNext(newNode);
                     }
                 }
                 oTemp = oTemp.getDown();
             }
+        }
+    }
+
+    public boolean hasOuter(Object data) {
+        if (head == null) {
+            return false;
+        } else {
+            OuterNode temp = head;
+            while (temp != null) {
+                if ((char) temp.getData() == (char) data) {
+                    return true;
+                }
+                temp = temp.getDown();
+            }
+            return false;
+        }
+    }
+
+    public boolean hasInner(Object outerData, Object innerData) {
+        if (head == null) {
+            return false;
+        } else {
+            if (hasOuter(outerData)) {
+                OuterNode oTemp = head;
+                while (oTemp != null) {
+                    if ((char) oTemp.getData() == (char) outerData) {
+                        InnerNode iTemp = oTemp.getRight();
+                        if (iTemp == null) {
+                            return false;
+                        } else {
+                            while (iTemp != null) {
+                                if ((((Word) iTemp.getData()).getWord())
+                                        .equalsIgnoreCase(((Word) innerData).getWord())) {
+                                    return true;
+                                }
+                                iTemp = iTemp.getNext();
+                            }
+                        }
+                    }
+                    oTemp = oTemp.getDown();
+                }
+            }
+            return false;
         }
     }
 
