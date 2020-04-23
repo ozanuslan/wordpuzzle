@@ -85,6 +85,11 @@ public class Read {
                     }
                 }
             }
+            if(errorLines.size() > 0){
+                Console.setCursorPosition(0, 0);
+                Console.print("Incorrect word(s) in "+wordPath.substring(0, wordPath.indexOf("."))+" on line(s): ", Console.redonblack);
+                errorLines.display();
+            }
         } catch (FileNotFoundException e) {
             Scanner sc = new Scanner(System.in);
             Console.println(e.toString(), Console.redonblack);
