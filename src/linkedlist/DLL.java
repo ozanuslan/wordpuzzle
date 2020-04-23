@@ -1,5 +1,8 @@
 package linkedlist;
 
+import game.Console;
+import game.User;
+
 public class DLL {
     public class Node {
         private Object data;
@@ -58,22 +61,26 @@ public class DLL {
         }
     }
 
-    public void displayFromHead() {
+    public void displayFromHead(int x, int y) {
         Node temp = head;
+        int place = 0;
         while (temp != null) {
-            System.out.print(temp.getData() + " ");
+            Console.setCursorPosition(x, y + place);
+            Console.print((place + 1) + " " + ((User) temp.getData()).getName() + " " + ((User) temp.getData()).getScore());
             temp = temp.getNext();
+            place++;
         }
-        System.out.println();
     }
 
-    public void displayFromTail() {
+    public void displayFromTail(int x, int y) {
         Node temp = tail;
+        int place = size();
         while (temp != null) {
-            System.out.print(temp.getData() + " ");
+            place--;
+            Console.setCursorPosition(x, y + place);
+            Console.print((place+1) + " " + ((User) temp.getData()).getName() + " " + ((User) temp.getData()).getScore());
             temp = temp.getPrev();
         }
-        System.out.println();
     }
 
     public int size() {
