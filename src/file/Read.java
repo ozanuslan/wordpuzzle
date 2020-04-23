@@ -9,10 +9,20 @@ import game.Word;
 import game.User;
 import game.Board;
 import game.Console;
+import game.Game;
 
 public class Read {
     private static final int DICTIONARYLIMIT = 100;
     private static final int HIGHSCOREPLAYERLIMIT = 10;
+
+    private static boolean tryParseInt(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 
     public static String[][] readBoard(String boardPath) {
         String[][] board = new String[Board.ROWCOUNT][Board.ROWLENGTH];
@@ -50,13 +60,6 @@ public class Read {
         }
 
         return null;
-    }
-
-    //TODO: Create a trace algorithm to find words on the solution board
-    public static SLL readSolutionWordList(String solutionPath) {
-        Board solution = new Board(solutionPath);
-        SLL solutionWordList = new SLL();
-        return solutionWordList;
     }
 
     public static MLL readWordList(String wordPath) {
@@ -139,12 +142,9 @@ public class Read {
         return highScoreTable;
     }
 
-    private static boolean tryParseInt(String s) {
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+    //TODO: Create a trace algorithm to find words on the solution board
+    public static SLL readSolutionWordList(String solutionPath, String puzzlePath) {
+        SLL solutionWordList = new SLL();
+        return solutionWordList;
     }
 }
