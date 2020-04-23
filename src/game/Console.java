@@ -8,14 +8,14 @@ import java.awt.Color;
 
 public class Console {
     private static enigma.console.Console c;
+    private static KeyListener klis;
+    private static int keypr; // key pressed?
+    private static int rkey;
+
     public static final TextAttributes greenonblack = new TextAttributes(Color.GREEN);
     public static final TextAttributes redonblack = new TextAttributes(Color.RED);
     public static final TextAttributes blueonblack = new TextAttributes(Color.BLUE);
     public static final TextAttributes blackongreen = new TextAttributes(Color.BLACK, Color.GREEN);
-
-    private static KeyListener klis;
-    private static int keypr; // key pressed?
-    private static int rkey;
 
     public static void setup() throws Exception { // --- Contructor
         // ------ Standard code for mouse and keyboard ------ Do not change
