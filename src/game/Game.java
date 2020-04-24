@@ -11,10 +11,17 @@ public class Game {
     private MLL wordList;
     private DLL highScoreTable;
 
-    int px, py;
+    public static final int WINX = 80;
+    public static final int WINY = 30;
+    private final int FONTSIZE = 22;
+    private final int FONTNO = 2;
+    private int px, py;
+
+    private User user1;
+    private User user2;
 
     public Game(String puzzlePath, String solutionPath, String wordPath, String highscorePath) throws Exception {
-        Console.getConsole("Word-Puzzle", 80, 30, 22, 2);
+        Console.getConsole("Word-Puzzle", WINX, WINY, FONTSIZE, FONTNO);
         Console.setup();
         puzzle = new Board(puzzlePath);
         solution = new Board(solutionPath);
@@ -23,6 +30,10 @@ public class Game {
         highScoreTable = Read.readHighScoreTable(highscorePath);
 
         px = py = 7;
+    }
+
+    private void menu(){
+        
     }
 
     private void takeKeyPress() throws InterruptedException {
