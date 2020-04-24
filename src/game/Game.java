@@ -8,7 +8,17 @@ public class Game {
     private Board puzzle;
     private Board solution;
     private SLL solutionWordList;
-    private MLL wordList;
+
+    //------------------------------------------IMPORTANT!-----------------------------------------------------//
+    /* 
+    Word class has isSolution attribute which determines whether a word is in the solution or not
+    after tracing the solution board to find words, words in the wordlist must be tagged as true for isSolution
+                                    !!! THIS HASN'T BEEN IMPLEMENTED YET!!!
+    */
+    private SLL wordList; // SLL to hold all words and their completion, solution words will be tagged in here!
+    //---------------------------------------------------------------------------------------------------------//
+
+    private MLL checkList; // MLL for checking words throughout the game
     private DLL highScoreTable;
 
     public static final int WINX = 80;
@@ -27,6 +37,7 @@ public class Game {
         solution = new Board(solutionPath);
         solutionWordList = Read.readSolutionWordList(solutionPath, puzzlePath);
         wordList = Read.readWordList(wordPath);
+        checkList = Read.readCheckList(wordPath);
         highScoreTable = Read.readHighScoreTable(highscorePath);
 
         px = py = 7;
@@ -75,7 +86,8 @@ public class Game {
             takeKeyPress();
             Thread.sleep(20);
         }
-        // wordList.display(Console.greenonblack);
+        // wordList.displayUnusedWords(0, 0);
+        // checkList.display(Console.greenonblack);
         // highScoreTable.displayFromHead(0,0);
     }
 }
