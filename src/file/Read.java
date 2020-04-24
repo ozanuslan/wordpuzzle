@@ -33,29 +33,23 @@ public class Read {
                 if (row.length == Board.ROWLENGTH) {
                     board[i] = row;
                 } else {
-                    Scanner exit = new Scanner(System.in);
                     Console.println(boardPath + " has incorrect row length on line " + (i + 1) + ".",
                             Console.redonblack);
                     Console.println("The program cannot continue without a proper "
                             + boardPath.substring(0, boardPath.indexOf(".")) + ".", Console.redonblack);
-                    exit.nextLine();
-                    exit.close();
+                    Console.readLine();
                     System.exit(1);
                 }
             }
             sc.close();
             return board;
         } catch (FileNotFoundException e) {
-            Scanner sc = new Scanner(System.in);
             Console.println(e.toString(), Console.redonblack);
-            sc.nextLine();
-            sc.close();
+            Console.readLine();
             System.exit(1);
         } catch (Exception e) {
-            Scanner sc = new Scanner(System.in);
             Console.println("Possibly incorrect amount of rows.", Console.redonblack);
-            sc.nextLine();
-            sc.close();
+            Console.readLine();
             System.exit(1);
         }
 
@@ -95,10 +89,8 @@ public class Read {
                 errorList.display();
             }
         } catch (FileNotFoundException e) {
-            Scanner sc = new Scanner(System.in);
             Console.println(e.toString(), Console.redonblack);
-            sc.nextLine();
-            sc.close();
+            Console.readLine();
             System.exit(1);
         }
         return wordList;
@@ -133,10 +125,8 @@ public class Read {
                 }
             }
         } catch (FileNotFoundException e) {
-            Scanner sc = new Scanner(System.in);
             Console.println(e.toString(), Console.redonblack);
-            sc.nextLine();
-            sc.close();
+            Console.readLine();
             System.exit(1);
         }
         return highScoreTable;

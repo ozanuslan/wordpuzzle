@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import enigma.console.TextAttributes;
 import java.awt.Color;
+import java.util.Scanner;
 
 public class Console {
     private static enigma.console.Console c;
@@ -67,5 +68,21 @@ public class Console {
 
     public static void setCursorPosition(int x, int y) {
         c.getTextWindow().setCursorPosition(x, y);
+    }
+
+    public static void clear(){
+        for(int i = 0; i < Game.WINY - 1; i++){
+            for(int j = 0; j < Game.WINX; j++){
+                Console.setCursorPosition(j, i);
+                Console.print(" ");
+            }
+        }
+    }
+
+    public static String readLine(){
+        Scanner sc = new Scanner(System.in);
+        String s = sc.nextLine();
+        sc.close();
+        return s;
     }
 }
