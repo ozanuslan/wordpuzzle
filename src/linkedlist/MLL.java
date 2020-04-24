@@ -5,11 +5,11 @@ import game.Console;
 import game.Word;
 
 public class MLL {
-    class InnerNode {
+    class Node {
         private Object data;
-        private InnerNode next;
+        private Node next;
 
-        public InnerNode(Object data) {
+        public Node(Object data) {
             this.data = data;
             next = null;
         }
@@ -22,11 +22,11 @@ public class MLL {
             this.data = data;
         }
 
-        public InnerNode getNext() {
+        public Node getNext() {
             return next;
         }
 
-        public void setNext(InnerNode next) {
+        public void setNext(Node next) {
             this.next = next;
         }
     }
@@ -34,7 +34,7 @@ public class MLL {
     class OuterNode {
         private Object data;
         private OuterNode down;
-        private InnerNode right;
+        private Node right;
 
         public OuterNode(Object data) {
             this.data = data;
@@ -58,11 +58,11 @@ public class MLL {
             this.down = down;
         }
 
-        public InnerNode getRight() {
+        public Node getRight() {
             return right;
         }
 
-        public void setRight(InnerNode right) {
+        public void setRight(Node right) {
             this.right = right;
         }
     }
@@ -81,7 +81,14 @@ public class MLL {
         this.head = head;
     }
 
-    public void addWordAlphabetically(Word word) {
+    public void moveSLLToMLLAlphabetically(SLL sll){
+        int sllSize=  sll.size();
+        for(int i = 0; i < sllSize; i++){
+            addWordAlphabetically(sll.getWordByIndex(i));
+        }
+    }
+
+    private void addWordAlphabetically(Word word) {
         if (!hasOuter(word.getWord().charAt(0))) {
             addOuterNode(word.getWord().charAt(0));
             addInnerNode(word.getWord().charAt(0), word);
@@ -117,8 +124,8 @@ public class MLL {
             OuterNode oTemp = head;
             while (oTemp != null) {
                 if ((char) outerData == (char) oTemp.getData()) {
-                    InnerNode iTemp = oTemp.getRight();
-                    InnerNode newNode = new InnerNode(innerData);
+                    Node iTemp = oTemp.getRight();
+                    Node newNode = new Node(innerData);
                     if (iTemp == null) {
                         oTemp.setRight(newNode);
                     } else {
@@ -164,7 +171,7 @@ public class MLL {
                 OuterNode oTemp = head;
                 while (oTemp != null) {
                     if ((char) oTemp.getData() == (char) outerData) {
-                        InnerNode iTemp = oTemp.getRight();
+                        Node iTemp = oTemp.getRight();
                         if (iTemp == null) {
                             return false;
                         } else {
@@ -201,7 +208,7 @@ public class MLL {
         OuterNode oTemp = head;
         while (oTemp != null) {
             if (outerData == oTemp.getData()) {
-                InnerNode iTemp = oTemp.getRight();
+                Node iTemp = oTemp.getRight();
                 if (iTemp != null) {
                     while (iTemp != null) {
                         size++;
@@ -231,10 +238,10 @@ public class MLL {
         return o.getData();
     }
 
-    private InnerNode getInnerByIndex(int outerIndex, int innerIndex) {
+    private Node getInnerByIndex(int outerIndex, int innerIndex) {
         OuterNode o = getOuterByIndex(outerIndex);
         if (innerIndex < innerSize(o.getData())) {
-            InnerNode temp = o.getRight();
+            Node temp = o.getRight();
             for (int i = 0; i < innerIndex; i++) {
                 temp = temp.getNext();
             }
@@ -245,7 +252,7 @@ public class MLL {
     }
 
     public Object getInnerDataByIndex(int outerIndex, int innerIndex) {
-        InnerNode i = getInnerByIndex(outerIndex, innerIndex);
+        Node i = getInnerByIndex(outerIndex, innerIndex);
         return i.getData();
     }
 
@@ -254,7 +261,7 @@ public class MLL {
             OuterNode oTemp = head;
             while (oTemp != null) {
                 Console.print(oTemp.getData() + " --> ");
-                InnerNode iTemp = oTemp.getRight();
+                Node iTemp = oTemp.getRight();
                 while (iTemp != null) {
                     Console.print(((Word) iTemp.getData()).getWord() + " ");
                     iTemp = iTemp.getNext();
@@ -270,7 +277,7 @@ public class MLL {
             OuterNode oTemp = head;
             while (oTemp != null) {
                 Console.print(oTemp.getData() + " --> ", t);
-                InnerNode iTemp = oTemp.getRight();
+                Node iTemp = oTemp.getRight();
                 while (iTemp != null) {
                     Console.print(((Word) iTemp.getData()).getWord() + " ", t);
                     iTemp = iTemp.getNext();
