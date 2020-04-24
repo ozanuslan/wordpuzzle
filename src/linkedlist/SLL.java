@@ -2,15 +2,16 @@ package linkedlist;
 
 import enigma.console.TextAttributes;
 import game.Console;
+import game.Word;
 
 public class SLL {
     public class Node {
         private Object data;
-        private Node link;
+        private Node next;
 
         public Node(Object data) {
             this.data = data;
-            link = null;
+            next = null;
         }
 
         public Object getData() {
@@ -21,12 +22,12 @@ public class SLL {
             this.data = data;
         }
 
-        public Node getLink() {
-            return link;
+        public Node getNext() {
+            return next;
         }
 
-        public void setLink(Node link) {
-            this.link = link;
+        public void setNext(Node link) {
+            this.next = link;
         }
     }
 
@@ -40,21 +41,48 @@ public class SLL {
         if (head != null) {
             Node temp = head;
 
-            while (temp.getLink() != null) {
-                temp = temp.getLink();
+            while (temp.getNext() != null) {
+                temp = temp.getNext();
             }
 
-            temp.setLink(new Node(data));
+            temp.setNext(new Node(data));
         } else {
             Node newNode = new Node(data);
             head = newNode;
         }
     }
 
+    public void addWordAlphabetically(Word w) {
+        if (head == null) {
+            Node newNode = new Node(w);
+            head = newNode;
+        } else {
+            Node temp = head;
+            Node newNode = new Node(w);
+            if (w.getWord().compareTo(((Word) temp.getData()).getWord()) < 0) {
+                newNode.setNext(temp);
+                head = newNode;
+            }
+            while (temp.getNext() != null && w.getWord().compareTo(((Word) temp.getNext().getData()).getWord()) > 0) {
+                temp = temp.getNext();
+            }
+            newNode.setNext(temp.getNext());
+            temp.setNext(newNode);
+        }
+    }
+
+    public Word getWordByIndex(int index) {
+        Node temp = head;
+        for (int i = 0; i < index; i++) {
+            temp = temp.getNext();
+        }
+        return (Word) temp.getData();
+    }
+
     public void delete(Object data) {
         if (head != null) {
             while (head != null && head.getData() == data) {
-                head = head.getLink();
+                head = head.getNext();
             }
 
             Node temp = head;
@@ -62,12 +90,12 @@ public class SLL {
 
             while (temp != null) {
                 if (temp.getData() == data) {
-                    prev.setLink(temp.getLink());
+                    prev.setNext(temp.getNext());
                     temp = prev;
                 }
 
                 prev = temp;
-                temp = temp.getLink();
+                temp = temp.getNext();
             }
         }
     }
@@ -77,7 +105,7 @@ public class SLL {
             Node temp = head;
             while (temp != null) {
                 Console.print(temp.getData() + " ");
-                temp = temp.getLink();
+                temp = temp.getNext();
             }
         }
     }
@@ -87,7 +115,21 @@ public class SLL {
             Node temp = head;
             while (temp != null) {
                 Console.print(temp.getData() + " ", t);
-                temp = temp.getLink();
+                temp = temp.getNext();
+            }
+        }
+    }
+
+    public void displayUnusedWords(int x, int y) {
+        if (head != null) {
+            Node temp = head;
+            Console.setCursorPosition(x, y);
+            Console.print("Unused words: ");
+            while (temp != null) {
+                if (!((Word) temp.getData()).isComplete()) {
+                    Console.print(((Word) temp.getData()).getWord() + " ");
+                }
+                temp = temp.getNext();
             }
         }
     }
@@ -99,7 +141,7 @@ public class SLL {
                 if (data == temp.getData()) {
                     return true;
                 }
-                temp = temp.getLink();
+                temp = temp.getNext();
             }
         }
 
@@ -112,7 +154,7 @@ public class SLL {
             Node temp = head;
             while (temp != null) {
                 size++;
-                temp = temp.getLink();
+                temp = temp.getNext();
             }
         }
 
@@ -128,7 +170,7 @@ public class SLL {
                 uniqueNodes.insert(data);
             }
 
-            temp = temp.getLink();
+            temp = temp.getNext();
         }
 
         return uniqueNodes;
@@ -142,7 +184,7 @@ public class SLL {
                 if (temp.getData() == data) {
                     count++;
                 }
-                temp = temp.getLink();
+                temp = temp.getNext();
             }
         }
 
