@@ -56,8 +56,8 @@ public class Read {
         return null;
     }
 
-    public static MLL readWordList(String wordPath) {
-        MLL wordList = new MLL();
+    public static SLL readWordList(String wordPath) {
+        SLL sllWordList = new SLL();
         try {
             Scanner sc = new Scanner(new File(wordPath));
             int lineCount = 0;
@@ -78,7 +78,7 @@ public class Read {
                     if (wordData[0].length() < 2 || wordData[1].length() < 2) {
                         errorList.insert(lineCount);
                     } else {
-                        wordList.addWordAlphabetically(new Word(wordData[0].toLowerCase(), wordData[1]));
+                        sllWordList.addWordAlphabetically(new Word(wordData[0].toLowerCase(), wordData[1]));
                     }
                 }
             }
@@ -93,6 +93,14 @@ public class Read {
             Console.readLine();
             System.exit(1);
         }
+
+        return sllWordList;
+    }
+
+    public static MLL readCheckList(String wordPath){
+        SLL sllWordList = readWordList(wordPath);
+        MLL wordList = new MLL();
+        wordList.moveSLLToMLLAlphabetically(sllWordList);
         return wordList;
     }
 
