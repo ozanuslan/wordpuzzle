@@ -1,6 +1,6 @@
 package game;
 
-import file.Read;
+import file.Input;
 import linkedlist.*;
 import java.awt.event.KeyEvent;
 
@@ -15,7 +15,7 @@ public class Game {
     */
     private SLL wordList; // SLL to hold all words and their completion, solution words will be tagged in here!
     //---------------------------------------------------------------------------------------------------------//
-
+    private SLL wordCoords;
     private MLL checkList; // MLL to check words before they are completed
     private DLL highScoreTable;
 
@@ -23,7 +23,7 @@ public class Game {
     public static final int WINY = 30;
     private final int FONTSIZE = 22;
     private final int FONTNO = 2;
-    private int px, py;
+    private Coordinate playerPos;
 
     private User user1;
     private User user2;
@@ -33,11 +33,12 @@ public class Game {
         Console.setup();
         puzzle = new Board(puzzlePath);
         solution = new Board(solutionPath);
-        wordList = Read.readWordList(wordPath);
-        checkList = Read.readCheckList(wordList);
-        highScoreTable = Read.readHighScoreTable(highscorePath);
-
-        px = py = 7;
+        wordList = Input.readWordList(wordPath);
+        Input.readSolutionWordList(solution, puzzle, wordList); //Sets words in the wordlist as solution if they exist in solution board
+        checkList = Input.readCheckList(wordList);
+        wordCoords = Input.getSolutionWordCoords(puzzle);
+        highScoreTable = Input.readHighScoreTable(highscorePath);
+        playerPos = new Coordinate(7, 7);
     }
 
     private void menu() {
@@ -57,7 +58,7 @@ public class Game {
             if (name.length() < 2) {
                 Console.println("Username cannot be shorter than 2", Console.redonblack);
                 Console.print("Please enter a legal username: ");
-            } else if(name.length() > 10){
+            } else if (name.length() > 10) {
                 Console.println("Username cannot be longer than 10", Console.redonblack);
                 Console.print("Please enter a legal username: ");
             } else {
@@ -73,27 +74,27 @@ public class Game {
         //------------------------------------------------------------------------------------------------//
         int intKey = Console.takeKeyPress();
         char charKey = (char) intKey;
-        if (intKey == KeyEvent.VK_UP && py > 0) {
-            py--;
-        } else if (intKey == KeyEvent.VK_DOWN && py < Board.ROWCOUNT - 1) {
-            py++;
-        } else if (intKey == KeyEvent.VK_LEFT && px > 0) {
-            px--;
-        } else if (intKey == KeyEvent.VK_RIGHT && px < Board.ROWLENGTH - 1) {
-            px++;
+        if (intKey == KeyEvent.VK_UP && playerPos.getY() > 0) {
+            playerPos.setY(playerPos.getY() - 1);
+        } else if (intKey == KeyEvent.VK_DOWN && playerPos.getY() < Board.ROWCOUNT - 1) {
+            playerPos.setY(playerPos.getY() + 1);
+        } else if (intKey == KeyEvent.VK_LEFT && playerPos.getX() > 0) {
+            playerPos.setX(playerPos.getX() - 1);
+        } else if (intKey == KeyEvent.VK_RIGHT && playerPos.getX() < Board.ROWLENGTH - 1) {
+            playerPos.setX(playerPos.getX() + 1);
         } else if (intKey == KeyEvent.VK_SPACE) {
             System.exit(0);
         } else if (intKey > 64 && intKey < 91) { // Key press between A-Z
-            puzzle.setElementAt(px, py, Character.toString(charKey).toLowerCase());
+            puzzle.setElementAt(playerPos.getX(), playerPos.getY(), Character.toString(charKey).toLowerCase());
         }
     }
 
     private void printCursor(int px, int py) {
-        Console.setCursorPosition(px + 1, py + 1);
-        if (puzzle.getBoard()[py][px].equals("0") || puzzle.getBoard()[py][px].equals("1")) {
+        Console.setCursorPosition(playerPos.getX() + 1, playerPos.getY() + 1);
+        if (puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("0") || puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("1")) {
             Console.print("█", Console.greenonblack);
         } else {
-            Console.print(puzzle.getBoard()[py][px].toUpperCase(), Console.blackongreen);
+            Console.print(puzzle.getBoard()[playerPos.getY()][playerPos.getX()].toUpperCase(), Console.blackongreen);
         }
     }
 
@@ -103,7 +104,7 @@ public class Game {
         solution.displayBoard(17, 0, true);
         while (true) {
             puzzle.displayBoard(1, 1, false);
-            printCursor(px, py);
+            printCursor(playerPos.getX(), playerPos.getY());
             takeKeyPress();
             Thread.sleep(20);
         }
