@@ -1,6 +1,7 @@
 package linkedlist;
 
 import enigma.console.TextAttributes;
+import game.Board;
 import game.Console;
 import game.Coordinate;
 import game.Word;
@@ -80,7 +81,7 @@ public class SLL {
         return (Word) temp.getData();
     }
 
-    public Object getElementByIndex(int index){
+    public Object getElementByIndex(int index) {
         Node temp = head;
         for (int i = 0; i < index; i++) {
             temp = temp.getNext();
@@ -170,55 +171,85 @@ public class SLL {
         return size;
     }
 
-    public void markWordAsSolution(String wordToMark){
-        Node temp = head;
-        while(temp != null){
-            if(wordToMark.equalsIgnoreCase(((Word)temp.getData()).getWord())){
-                ((Word)temp.getData()).setSolution(true);
-                break;
-            }
-            temp = temp.getNext();
-        }
-    }
-
-    public void setWordCoords(Coordinate[] c, String wordToSetCoords){
-        Node temp = head;
-        while(temp != null){
-            if(wordToSetCoords.equalsIgnoreCase(((Word)temp.getData()).getWord())){
-                ((Word)temp.getData()).setCoords(c);;
-                break;
-            }
-            temp = temp.getNext();
-        }
-    }
-
-    private SLL findUniqueNodes() {
-        SLL uniqueNodes = new SLL();
+    public void markWordAsSolution(String wordToMark) {
         Node temp = head;
         while (temp != null) {
-            Object data = temp.getData();
-            if (!uniqueNodes.search(data)) {
-                uniqueNodes.add(data);
+            if (wordToMark.equalsIgnoreCase(((Word) temp.getData()).getWord())) {
+                ((Word) temp.getData()).setSolution(true);
+                break;
             }
-
             temp = temp.getNext();
         }
-
-        return uniqueNodes;
     }
 
-    private int count(Object data) {
-        int count = 0;
-        if (head != null) {
-            Node temp = head;
-            while (temp != null) {
-                if (temp.getData() == data) {
-                    count++;
+    public void setWordCoords(Coordinate[] c, String wordToSetCoords) {
+        Node temp = head;
+        while (temp != null) {
+            if (wordToSetCoords.equalsIgnoreCase(((Word) temp.getData()).getWord())) {
+                ((Word) temp.getData()).setCoords(c);
+                ;
+                break;
+            }
+            temp = temp.getNext();
+        }
+    }
+
+    public void displaySolutionWords(int x, int y, boolean hasDisplayFrame) {
+        int generalOffset;
+        if (hasDisplayFrame) {
+            generalOffset = 1;
+            displayFrame(x, y);
+        } else {
+            generalOffset = 0;
+        }
+        int listSize = size();
+        int maxWordLen = -1;
+        int rowOffset = 0;
+        int columnOffset = 0;
+        for (int i = 0; i < listSize; i++) {
+            if (((Word) getElementByIndex(i)).isSolution()) {
+                Console.setCursorPosition(x + generalOffset + columnOffset, y + generalOffset + rowOffset);
+                Console.print("[");
+                if (((Word) getElementByIndex(i)).isComplete()) {
+                    Console.print("X");
+                } else {
+                    Console.print(" ");
                 }
-                temp = temp.getNext();
+                Console.print("]" + ((Word) getElementByIndex(i)).getWord().toUpperCase());
+                rowOffset++;
+                maxWordLen = ((Word) getElementByIndex(i)).getWord().length();
+                if (rowOffset >= Board.ROWCOUNT - 1 && i != listSize - 1) {
+                    rowOffset = 0;
+                    columnOffset += maxWordLen;
+                    maxWordLen = 0;
+                }
             }
         }
+    }
 
-        return count;
+    private void displayFrame(int x, int y) {
+        int frameRowCount = Board.ROWCOUNT + 2;
+        int frameRowLength = Board.ROWLENGTH * 3 - 5;
+        for (int i = 0; i < frameRowCount; i++) {
+            for (int j = 0; j < frameRowLength; j++) {
+                Console.setCursorPosition(x + j, y + i);
+                if (i == 0 && j == 0) {
+                    Console.print("╔");
+                } else if (i == 0 && j == 1) {
+                    Console.print("WORD-LIST");
+                    j+=8;
+                } else if (i == 0 && j == frameRowLength - 1) {
+                    Console.print("╗");
+                } else if (i == frameRowCount - 1 && j == 0) {
+                    Console.print("╚");
+                } else if (i == frameRowCount - 1 && j == frameRowLength - 1) {
+                    Console.print("╝");
+                } else if ((i == 0 && j > 8 && j < frameRowLength - 1) || (i == frameRowCount - 1 && j > 0 && j < frameRowLength - 1)) {
+                    Console.print("═");
+                } else if ((j == 0 || j == frameRowLength - 1) && (i > 0 && i < frameRowCount - 1)) {
+                    Console.print("║");
+                }
+            }
+        }
     }
 }
