@@ -97,11 +97,10 @@ public class Read {
         return sllWordList;
     }
 
-    public static MLL readCheckList(String wordPath){
-        SLL sllWordList = readWordList(wordPath);
-        MLL wordList = new MLL();
-        wordList.moveSLLToMLLAlphabetically(sllWordList);
-        return wordList;
+    public static MLL readCheckList(SLL sllWordList){
+        MLL checkList = new MLL();
+        checkList.moveSLLToMLLAlphabetically(sllWordList);
+        return checkList;
     }
 
     public static DLL readHighScoreTable(String highscorePath) {
@@ -144,5 +143,9 @@ public class Read {
     public static SLL readSolutionWordList(String solutionPath, String puzzlePath) {
         SLL solutionWordList = new SLL();
         return solutionWordList;
+    }
+
+    private static void getSolutionWordCoords(){
+
     }
 }
