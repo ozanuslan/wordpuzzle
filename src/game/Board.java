@@ -20,19 +20,19 @@ public class Board {
         int frameRowLength = Board.ROWLENGTH + 2;
         for (int i = 0; i < frameRowCount; i++) {
             for (int j = 0; j < frameRowLength; j++) {
-                Console.setCursorPosition(x + i, y + j);
+                Console.setCursorPosition(x + j, y + i);
                 if (i == 0 && j == 0) {
                     Console.print("╔");
                 } else if (i == 0 && j == frameRowLength - 1) {
-                    Console.print("╚");
-                } else if (i == frameRowCount - 1 && j == 0) {
                     Console.print("╗");
+                } else if (i == frameRowCount - 1 && j == 0) {
+                    Console.print("╚");
                 } else if (i == frameRowCount - 1 && j == frameRowLength - 1) {
                     Console.print("╝");
                 } else if ((i == 0 || i == frameRowCount - 1) && (j > 0 && j < frameRowLength - 1)) {
-                    Console.print("║");
-                } else if ((j == 0 || j == frameRowLength - 1) && (i > 0 && i < frameRowCount - 1)) {
                     Console.print("═");
+                } else if ((j == 0 || j == frameRowLength - 1) && (i > 0 && i < frameRowCount - 1)) {
+                    Console.print("║");
                 }
             }
         }
