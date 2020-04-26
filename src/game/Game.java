@@ -7,8 +7,6 @@ import java.awt.event.KeyEvent;
 public class Game {
     private Board puzzle;
     private Board solution;
-    private SLL solutionWordList;
-
     //------------------------------------------IMPORTANT!-----------------------------------------------------//
     /* 
     Word class has isSolution attribute which determines whether a word is in the solution or not
@@ -18,7 +16,7 @@ public class Game {
     private SLL wordList; // SLL to hold all words and their completion, solution words will be tagged in here!
     //---------------------------------------------------------------------------------------------------------//
 
-    private MLL checkList; // MLL for checking words throughout the game
+    private MLL checkList; // MLL to check words before they are completed
     private DLL highScoreTable;
 
     public static final int WINX = 80;
@@ -35,20 +33,42 @@ public class Game {
         Console.setup();
         puzzle = new Board(puzzlePath);
         solution = new Board(solutionPath);
-        solutionWordList = Read.readSolutionWordList(solutionPath, puzzlePath);
         wordList = Read.readWordList(wordPath);
-        checkList = Read.readCheckList(wordPath);
+        checkList = Read.readCheckList(wordList);
         highScoreTable = Read.readHighScoreTable(highscorePath);
 
         px = py = 7;
     }
 
-    private void menu(){
-        
+    private void menu() {
+        Console.println("Welcome to Word-Puzzle!");
+        Console.print("What is player1's name? ");
+        user1 = new User(takeUsername());
+        Console.print("What is player2's name? ");
+        user2 = new User(takeUsername());
+        Console.clear();
+    }
+
+    private String takeUsername() {
+        String name = "";
+        boolean isLegitName = false;
+        while (!isLegitName) {
+            name = Console.readLine();
+            if (name.length() < 2) {
+                Console.println("Username cannot be shorter than 2", Console.redonblack);
+                Console.print("Please enter a legal username: ");
+            } else if(name.length() > 10){
+                Console.println("Username cannot be longer than 10", Console.redonblack);
+                Console.print("Please enter a legal username: ");
+            } else {
+                isLegitName = true;
+            }
+        }
+        return name;
     }
 
     private void takeKeyPress() throws InterruptedException {
-        //------------------------------------------------------------------------------------------------//
+        //-------------------------------------IMPORTANT!-------------------------------------------------//
         // Integer returned from the keypress event is always the uppercase equivalent of the key pressed.//
         //------------------------------------------------------------------------------------------------//
         int intKey = Console.takeKeyPress();
@@ -78,6 +98,7 @@ public class Game {
     }
 
     public void run() throws InterruptedException {
+        // menu();
         puzzle.displayBoard(0, 0, true);
         solution.displayBoard(17, 0, true);
         while (true) {
