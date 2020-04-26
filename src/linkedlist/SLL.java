@@ -2,6 +2,7 @@ package linkedlist;
 
 import enigma.console.TextAttributes;
 import game.Console;
+import game.Coordinate;
 import game.Word;
 
 public class SLL {
@@ -174,6 +175,17 @@ public class SLL {
         while(temp != null){
             if(wordToMark.equalsIgnoreCase(((Word)temp.getData()).getWord())){
                 ((Word)temp.getData()).setSolution(true);
+                break;
+            }
+            temp = temp.getNext();
+        }
+    }
+
+    public void setWordCoords(Coordinate[] c, String wordToSetCoords){
+        Node temp = head;
+        while(temp != null){
+            if(wordToSetCoords.equalsIgnoreCase(((Word)temp.getData()).getWord())){
+                ((Word)temp.getData()).setCoords(c);;
                 break;
             }
             temp = temp.getNext();
