@@ -3,6 +3,7 @@ package game;
 public class Word {
     String word, meaning;
     boolean isComplete, isSolution;
+    Coordinate[] coords;
     
     public Word(String word, String meaning) {
         this.word = word;
@@ -41,5 +42,13 @@ public class Word {
 
     public void setSolution(boolean isSolution) {
         this.isSolution = isSolution;
+    }
+
+    public Coordinate[] getCoords() {
+        return coords;
+    }
+
+    public void setCoords(Coordinate[] coords) {
+        this.coords = coords;
     }
 }
