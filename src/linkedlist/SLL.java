@@ -37,7 +37,7 @@ public class SLL {
         head = null;
     }
 
-    public void insert(Object data) {
+    public void add(Object data) {
         if (head != null) {
             Node temp = head;
 
@@ -77,6 +77,14 @@ public class SLL {
             temp = temp.getNext();
         }
         return (Word) temp.getData();
+    }
+
+    public Object getElementByIndex(int index){
+        Node temp = head;
+        for (int i = 0; i < index; i++) {
+            temp = temp.getNext();
+        }
+        return temp.getData();
     }
 
     public void delete(Object data) {
@@ -161,13 +169,24 @@ public class SLL {
         return size;
     }
 
+    public void markWordAsSolution(String wordToMark){
+        Node temp = head;
+        while(temp != null){
+            if(wordToMark.equalsIgnoreCase(((Word)temp.getData()).getWord())){
+                ((Word)temp.getData()).setSolution(true);
+                break;
+            }
+            temp = temp.getNext();
+        }
+    }
+
     private SLL findUniqueNodes() {
         SLL uniqueNodes = new SLL();
         Node temp = head;
         while (temp != null) {
             Object data = temp.getData();
             if (!uniqueNodes.search(data)) {
-                uniqueNodes.insert(data);
+                uniqueNodes.add(data);
             }
 
             temp = temp.getNext();
