@@ -1,6 +1,6 @@
 package game;
 
-import file.Read;
+import file.Input;
 
 public class Board {
     public static final int ROWCOUNT = 15;
@@ -8,7 +8,7 @@ public class Board {
     private String[][] board;
 
     public Board(String boardPath) {
-        board = Read.readBoard(boardPath);
+        board = Input.readBoard(boardPath);
     }
 
     public String[][] getBoard() {
