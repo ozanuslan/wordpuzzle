@@ -138,10 +138,11 @@ public class Input {
     public static void readSolutionWordList(Board solution, Board puzzle, SLL wordList) {
         SLL solutionWordCoords = getSolutionWordCoords(puzzle);
         int coordCount = solutionWordCoords.size();
-        String wordToMark;
+        String solutionWord;
         for (int i = 0; i < coordCount; i++) {
-            wordToMark = findWordOnCoords((Coordinate[])solutionWordCoords.getElementByIndex(i), solution);
-            wordList.markWordAsSolution(wordToMark);
+            solutionWord = findWordOnCoords((Coordinate[])solutionWordCoords.getElementByIndex(i), solution);
+            wordList.markWordAsSolution(solutionWord);
+            wordList.setWordCoords((Coordinate[])solutionWordCoords.getElementByIndex(i), solutionWord);
         }
     }
 
