@@ -15,7 +15,7 @@ public class Board {
         return board;
     }
 
-    private void displayFrame(int x, int y) {
+    private void printBoardFrame(int x, int y) {
         int frameRowCount = Board.ROWCOUNT + 2;
         int frameRowLength = Board.ROWLENGTH + 2;
         for (int i = 0; i < frameRowCount; i++) {
@@ -38,13 +38,13 @@ public class Board {
         }
     }
 
-    public void displayBoard(int x, int y, boolean hasDisplayFrame) {
+    public void printBoard(int x, int y, boolean hasDisplayFrame) {
         int rowCount = Board.ROWCOUNT;
         int colCount = Board.ROWLENGTH;
         int offset;
         if (hasDisplayFrame) {
             offset = 1;
-            displayFrame(x, y);
+            printBoardFrame(x, y);
         } else {
             offset = 0;
         }
