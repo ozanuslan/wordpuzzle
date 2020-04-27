@@ -84,7 +84,7 @@ public class MLL {
     public void moveSLLToMLLAlphabetically(SLL sll){
         int sllSize=  sll.size();
         for(int i = 0; i < sllSize; i++){
-            addWordAlphabetically(sll.getWordByIndex(i));
+            addWordAlphabetically((Word)sll.get(i));
         }
     }
 
