@@ -95,7 +95,19 @@ public class Input {
 
     public static MLL readCheckList(SLL sllWordList) {
         MLL checkList = new MLL();
-        checkList.moveSLLToMLLAlphabetically(sllWordList);
+        int wordSize = sllWordList.size();
+        Word word;
+        for (int i = 0; i < wordSize; i++) {
+            word = (Word) sllWordList.get(i);
+            if (!checkList.hasOuter(word.getWord().charAt(0))) {
+                checkList.addOuterNode(word.getWord().charAt(0));
+                checkList.addInnerNode(word.getWord().charAt(0), word);
+            } else {
+                if (!checkList.hasInner(word.getWord().charAt(0), word)) {
+                    checkList.addInnerNode(word.getWord().charAt(0), word);
+                }
+            }
+        }
         return checkList;
     }
 
@@ -144,13 +156,7 @@ public class Input {
             for (int j = 0; j < wordSize; j++) {
                 if (solutionWord.equalsIgnoreCase(((Word) wordList.get(j)).getWord())) {
                     ((Word) wordList.get(j)).setSolution(true);
-                    break;
-                }
-            }
-            for (int j = 0; j < wordSize; j++) {
-                if (solutionWord.equalsIgnoreCase(((Word) (Word) wordList.get(j)).getWord())) {
-                    ((Word) wordList.get(j))
-                            .setCoords((Coordinate[]) solutionWordCoords.get(i));
+                    ((Word) wordList.get(j)).setCoords((Coordinate[]) solutionWordCoords.get(i));
                     break;
                 }
             }
