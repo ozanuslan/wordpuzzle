@@ -89,11 +89,10 @@ public class Game {
         }
     }
 
-    public void printSolutionWords(int x, int y, boolean hasDisplayFrame) {
+    public void printWords(int x, int y, boolean hasDisplayFrame) {
         int generalOffset;
         if (hasDisplayFrame) {
             generalOffset = 1;
-            printWordFrame(x, y);
         } else {
             generalOffset = 0;
         }
@@ -102,7 +101,7 @@ public class Game {
         int rowOffset = 0;
         int columnOffset = 0;
         for (int i = 0; i < listSize; i++) {
-            //if (((Word) wordList.getElementByIndex(i)).isSolution()) {
+            //if (((Word) wordList.get(i)).isSolution()) {
             Console.setCursorPosition(x + generalOffset + columnOffset, y + generalOffset + rowOffset);
             if (((Word) wordList.get(i)).isComplete()) {
                 Console.print("[X]");
@@ -119,11 +118,13 @@ public class Game {
             }
             //}
         }
+        columnOffset+=maxWordLen;
+        printWordFrame(x, y, columnOffset);
     }
 
-    private void printWordFrame(int x, int y) {
+    private void printWordFrame(int x, int y, int columnOffset) {
         int frameRowCount = Board.ROWCOUNT + 2;
-        int frameRowLength = Board.ROWLENGTH * 7;
+        int frameRowLength = columnOffset+5;
         for (int i = 0; i < frameRowCount; i++) {
             for (int j = 0; j < frameRowLength; j++) {
                 Console.setCursorPosition(x + j, y + i);
@@ -173,7 +174,7 @@ public class Game {
         // menu();
         puzzle.printBoard(0, 0, true);
         // solution.displayBoard(17, 0, true);
-        printSolutionWords(17, 0, true);
+        printWords(17, 0, true);
         while (true) {
             puzzle.printBoard(1, 1, false);
             printCursor(playerPos.getX(), playerPos.getY());
