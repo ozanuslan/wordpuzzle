@@ -64,25 +64,6 @@ public class SLL {
         }
     }
 
-    public void addWordAlphabetically(Word w) {
-        if (head == null) {
-            Node newNode = new Node(w);
-            head = newNode;
-        } else {
-            Node temp = head;
-            Node newNode = new Node(w);
-            if (w.getWord().compareTo(((Word) temp.getData()).getWord()) < 0) {
-                newNode.setNext(temp);
-                head = newNode;
-            }
-            while (temp.getNext() != null && w.getWord().compareTo(((Word) temp.getNext().getData()).getWord()) > 0) {
-                temp = temp.getNext();
-            }
-            newNode.setNext(temp.getNext());
-            temp.setNext(newNode);
-        }
-    }
-
     public Object get(int index) {
         Node temp = head;
         for (int i = 0; i < index; i++) {
