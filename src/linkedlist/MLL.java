@@ -81,24 +81,6 @@ public class MLL {
         this.head = head;
     }
 
-    public void moveSLLToMLLAlphabetically(SLL sll){
-        int sllSize=  sll.size();
-        for(int i = 0; i < sllSize; i++){
-            addWordAlphabetically((Word)sll.get(i));
-        }
-    }
-
-    private void addWordAlphabetically(Word word) {
-        if (!hasOuter(word.getWord().charAt(0))) {
-            addOuterNode(word.getWord().charAt(0));
-            addInnerNode(word.getWord().charAt(0), word);
-        } else {
-            if (!hasInner(word.getWord().charAt(0), word)) {
-                addInnerNode(word.getWord().charAt(0), word);
-            }
-        }
-    }
-
     public void addOuterNode(Object data) {
         if (head == null) {
             OuterNode newNode = new OuterNode(data);
@@ -233,7 +215,7 @@ public class MLL {
         }
     }
 
-    public Object getOuterDataByIndex(int index) {
+    public Object getOuterAt(int index) {
         OuterNode o = getOuterByIndex(index);
         return o.getData();
     }
@@ -251,7 +233,7 @@ public class MLL {
         }
     }
 
-    public Object getInnerDataByIndex(int outerIndex, int innerIndex) {
+    public Object getInnerAt(int outerIndex, int innerIndex) {
         Node i = getInnerByIndex(outerIndex, innerIndex);
         return i.getData();
     }
