@@ -67,19 +67,22 @@ public class Input {
                             + "th word will not be included in the game.", Console.redonblack);
                     break;
                 }
-                wordData = sc.nextLine().split(",");
+                wordData = sc.nextLine().split("\\,");
                 if (wordData.length != 2) {
                     errorList.add(lineCount);
                 } else {
                     if (wordData[0].length() < 2 || wordData[1].length() < 2) {
                         errorList.add(lineCount);
                     } else {
-                        sllWordList.addWordAlphabetically(new Word(wordData[0].toLowerCase(), wordData[1]));
+                        sllWordList.add(new Word(wordData[0].toLowerCase(), wordData[1]));
                     }
                 }
             }
+
+            sllWordList.sort();
+
             if (errorList.size() > 0) {
-                Console.setCursorPosition(0, 0);
+                Console.setCursorPosition(0, 20);
                 Console.print("Incorrect word(s) in " + wordPath.substring(0, wordPath.indexOf(".")) + " on line(s): ",
                         Console.redonblack);
                 errorList.display();
