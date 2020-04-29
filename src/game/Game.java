@@ -19,9 +19,9 @@ public class Game {
     private MLL checkList; // MLL to check words before they are completed
     private DLL highScoreTable;
 
-    public static final int WINX = 120;
+    public static final int WINX = 115;
     public static final int WINY = 30;
-    private final int FONTSIZE = 18;
+    private final int FONTSIZE = 20;
     private final int FONTNO = 2;
     private Coordinate playerPos;
 
@@ -101,7 +101,7 @@ public class Game {
         int rowOffset = 0;
         int columnOffset = 0;
         for (int i = 0; i < listSize; i++) {
-            //if (((Word) wordList.get(i)).isSolution()) {
+            // if (((Word) wordList.get(i)).isSolution()) {
             Console.setCursorPosition(x + generalOffset + columnOffset, y + generalOffset + rowOffset);
             if (((Word) wordList.get(i)).isComplete()) {
                 Console.print("[X]");
@@ -111,20 +111,20 @@ public class Game {
             Console.print(((Word) wordList.get(i)).getWord().toUpperCase());
             rowOffset++;
             maxWordLen = Math.max(maxWordLen, ((Word) wordList.get(i)).getWord().length());
-            if (rowOffset >= Board.ROWCOUNT  && i != listSize - 1) {
+            if (rowOffset >= Board.ROWCOUNT && i != listSize - 1) {
                 rowOffset = 0;
-                columnOffset += maxWordLen+3;
+                columnOffset += maxWordLen + 3;
                 maxWordLen = 0;
             }
-            //}
+            // }
         }
-        columnOffset+=maxWordLen;
+        columnOffset += maxWordLen;
         printWordFrame(x, y, columnOffset);
     }
 
     private void printWordFrame(int x, int y, int columnOffset) {
         int frameRowCount = Board.ROWCOUNT + 2;
-        int frameRowLength = columnOffset+5;
+        int frameRowLength = columnOffset + 5;
         for (int i = 0; i < frameRowCount; i++) {
             for (int j = 0; j < frameRowLength; j++) {
                 Console.setCursorPosition(x + j, y + i);
@@ -173,7 +173,7 @@ public class Game {
     public void run() throws InterruptedException {
         // menu();
         puzzle.printBoard(0, 0, true);
-        // solution.displayBoard(17, 0, true);
+        //solution.printBoard(17, 0, true);
         printWords(17, 0, true);
         while (true) {
             puzzle.printBoard(1, 1, false);
