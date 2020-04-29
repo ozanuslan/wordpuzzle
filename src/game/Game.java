@@ -7,19 +7,12 @@ import java.awt.event.KeyEvent;
 public class Game {
     private Board puzzle;
     private Board solution;
-    //------------------------------------------IMPORTANT!-----------------------------------------------------//
-    /* 
-    Word class has isSolution attribute which determines whether a word is in the solution or not
-    after tracing the solution board to find words, words in the wordlist must be tagged as true for isSolution
-                                    !!! THIS HASN'T BEEN IMPLEMENTED YET!!!
-    */
-    private SLL wordList; // SLL to hold all words and their completion, solution words will be tagged in here!
-    //---------------------------------------------------------------------------------------------------------//
+    private SLL wordList;
     private SLL wordCoords;
     private MLL checkList; // MLL to check words before they are completed
     private DLL highScoreTable;
 
-    public static final int WINX = 115;
+    public static final int WINX = 116;
     public static final int WINY = 30;
     private final int FONTSIZE = 20;
     private final int FONTNO = 2;
@@ -173,7 +166,7 @@ public class Game {
     public void run() throws InterruptedException {
         // menu();
         puzzle.printBoard(0, 0, true);
-        //solution.printBoard(17, 0, true);
+        // solution.printBoard(17, 0, true);
         printWords(17, 0, true);
         while (true) {
             puzzle.printBoard(1, 1, false);
@@ -181,7 +174,7 @@ public class Game {
             takeKeyPress();
             Thread.sleep(20);
         }
-        //displayUnusedWords(0, 0);
+        // displayUnusedWords(0, 0);
         // checkList.display(Console.greenonblack);
         // highScoreTable.displayFromHead(0,0);
     }
