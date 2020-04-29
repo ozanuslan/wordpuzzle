@@ -69,12 +69,12 @@ public class Input {
                 }
                 wordData = sc.nextLine().split("\\,");
                 if (wordData.length != 2) {
-                    errorList.add(lineCount);
+                    errorList.addToEnd(lineCount);
                 } else {
                     if (wordData[0].length() < 2 || wordData[1].length() < 2) {
-                        errorList.add(lineCount);
+                        errorList.addToEnd(lineCount);
                     } else {
-                        sllWordList.add(new Word(wordData[0].toLowerCase(), wordData[1]));
+                        sllWordList.addToEnd(new Word(wordData[0].toLowerCase(), wordData[1]));
                     }
                 }
             }
@@ -132,12 +132,12 @@ public class Input {
                 } else {
                     playerData = sc.nextLine().split(";");
                     if (playerData.length != 2) {
-                        errorList.add(playerCount);
+                        errorList.addToEnd(playerCount);
                     } else {
                         if (tryParseInt(playerData[1])) {
                             highScoreTable.add(new User(playerData[0], Integer.parseInt(playerData[1])));
                         } else {
-                            errorList.add(playerCount);
+                            errorList.addToEnd(playerCount);
                         }
                     }
                 }
@@ -182,7 +182,7 @@ public class Input {
                             startEndCoordinates = new Coordinate[2];
                             startEndCoordinates[0] = start;
                             startEndCoordinates[1] = end;
-                            coords.add(startEndCoordinates);
+                            coords.addToEnd(startEndCoordinates);
                         }
                         if (hasVerticalWord(j, i, b)) {
                             start = new Coordinate(j, i);
@@ -190,7 +190,7 @@ public class Input {
                             startEndCoordinates = new Coordinate[2];
                             startEndCoordinates[0] = start;
                             startEndCoordinates[1] = end;
-                            coords.add(startEndCoordinates);
+                            coords.addToEnd(startEndCoordinates);
                         }
                     } else {
                         Console.println("The puzzle has doesn't have a word for the character at " + j + " " + i
