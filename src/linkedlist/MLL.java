@@ -203,7 +203,7 @@ public class MLL {
         return size;
     }
 
-    private OuterNode getOuterByIndex(int index) {
+    private OuterNode getOuterAt(int index) {
         if (index < outerSize()) {
             OuterNode temp = head;
             for (int i = 0; i < index; i++) {
@@ -215,13 +215,13 @@ public class MLL {
         }
     }
 
-    public Object getOuterAt(int index) {
-        OuterNode o = getOuterByIndex(index);
+    public Object getOuterDataAt(int index) {
+        OuterNode o = getOuterAt(index);
         return o.getData();
     }
 
-    private Node getInnerByIndex(int outerIndex, int innerIndex) {
-        OuterNode o = getOuterByIndex(outerIndex);
+    private Node getInnerAt(int outerIndex, int innerIndex) {
+        OuterNode o = getOuterAt(outerIndex);
         if (innerIndex < innerSize(o.getData())) {
             Node temp = o.getRight();
             for (int i = 0; i < innerIndex; i++) {
@@ -233,8 +233,8 @@ public class MLL {
         }
     }
 
-    public Object getInnerAt(int outerIndex, int innerIndex) {
-        Node i = getInnerByIndex(outerIndex, innerIndex);
+    public Object getInnerDataAt(int outerIndex, int innerIndex) {
+        Node i = getInnerAt(outerIndex, innerIndex);
         return i.getData();
     }
 
