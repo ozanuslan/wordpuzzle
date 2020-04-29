@@ -1,9 +1,7 @@
 package linkedlist;
 
 import enigma.console.TextAttributes;
-import game.Board;
 import game.Console;
-import game.Coordinate;
 import game.Word;
 
 public class SLL {
@@ -39,7 +37,7 @@ public class SLL {
         head = null;
     }
 
-    public void add(Object data) {
+    public void addToEnd(Object data) {
         if (head != null) {
             Node temp = head;
 
