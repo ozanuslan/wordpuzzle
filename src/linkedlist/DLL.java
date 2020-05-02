@@ -48,7 +48,7 @@ public class DLL {
         tail = null;
     }
 
-    public void add(Object data) {
+    public void addToEnd(Object data) {
         if (head != null && tail != null) {
             Node newNode = new Node(data);
             newNode.setPrev(tail);
@@ -61,12 +61,31 @@ public class DLL {
         }
     }
 
+    public void add(int index, Object data) {
+        if (index < size()) {
+            Node temp = head;
+            for (int i = 0; i < index; i++) {
+                temp = temp.getNext();
+            }
+            temp.setData(data);
+        }
+    }
+
+    public Object get(int index) {
+        Node temp = head;
+        for (int i = 0; i < index; i++) {
+            temp = temp.getNext();
+        }
+        return temp.getData();
+    }
+
     public void displayFromHead(int x, int y) {
         Node temp = head;
         int place = 0;
         while (temp != null) {
             Console.setCursorPosition(x, y + place);
-            Console.print((place + 1) + " " + ((User) temp.getData()).getName() + " " + ((User) temp.getData()).getScore());
+            Console.print(
+                    (place + 1) + " " + ((User) temp.getData()).getName() + " " + ((User) temp.getData()).getScore());
             temp = temp.getNext();
             place++;
         }
@@ -78,7 +97,8 @@ public class DLL {
         while (temp != null) {
             place--;
             Console.setCursorPosition(x, y + place);
-            Console.print((place+1) + " " + ((User) temp.getData()).getName() + " " + ((User) temp.getData()).getScore());
+            Console.print(
+                    (place + 1) + " " + ((User) temp.getData()).getName() + " " + ((User) temp.getData()).getScore());
             temp = temp.getPrev();
         }
     }
@@ -91,5 +111,19 @@ public class DLL {
             temp = temp.getNext();
         }
         return size;
+    }
+
+    public void sort() {
+        int size = size();
+        Object temp;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (((User) get(i)).getScore() > ((User) get(j)).getScore()) {
+                    temp = get(i);
+                    add(i, get(j));
+                    add(j, temp);
+                }
+            }
+        }
     }
 }
