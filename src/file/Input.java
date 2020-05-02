@@ -135,7 +135,7 @@ public class Input {
                         errorList.addToEnd(playerCount);
                     } else {
                         if (tryParseInt(playerData[1])) {
-                            highScoreTable.add(new User(playerData[0], Integer.parseInt(playerData[1])));
+                            highScoreTable.addToEnd(new User(playerData[0], Integer.parseInt(playerData[1])));
                         } else {
                             errorList.addToEnd(playerCount);
                         }
