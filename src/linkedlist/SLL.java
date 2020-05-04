@@ -138,20 +138,6 @@ public class SLL {
         return size;
     }
 
-    public void sort() {
-        int size = size();
-        Object temp;
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (((Word) get(i)).getWord().compareTo(((Word) get(j)).getWord()) < 0) {
-                    temp = get(i);
-                    add(i, get(j));
-                    add(j, temp);
-                }
-            }
-        }
-    }
-
     public void empty() {
         head = null;
     }
