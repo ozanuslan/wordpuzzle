@@ -8,8 +8,8 @@ import linkedlist.*;
 import game.*;
 
 public class Input {
-    private static final int DICTIONARYLIMIT = 100;
-    private static final int HIGHSCOREPLAYERLIMIT = 10;
+    public static final int DICTIONARYLIMIT = 100;
+    public static final int HIGHSCOREPLAYERLIMIT = 10;
 
     private static boolean tryParseInt(String s) {
         try {
