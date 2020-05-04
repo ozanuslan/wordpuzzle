@@ -1,10 +1,11 @@
 package game;
 
 import file.Input;
+import file.Output;
 import linkedlist.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Game {
     private Board puzzle;
@@ -16,6 +17,8 @@ public class Game {
     private MLL checkList; // MLL to check words before they are completed
     private DLL highScoreTable;
     private int solutionWordCount;
+
+    private String highscorePath;
 
     public static final int WINX = 116;
     public static final int WINY = 30;
@@ -41,6 +44,8 @@ public class Game {
         legalCoords = new SLL();
         incorrectCharCoords = new SLL();
         solutionWordCount = countSolutionWords();
+
+        this.highscorePath = highscorePath;
 
         playerPos = new Coordinate(7, 7);
         turn = true;
@@ -657,7 +662,7 @@ public class Game {
             playerPos.setX(playerPos.getX() - 1);
         } else if (intKey == KeyEvent.VK_RIGHT && playerPos.getX() < Board.ROWLENGTH - 1) {
             playerPos.setX(playerPos.getX() + 1);
-        } else if (intKey > 64 && intKey < 91 || intKey == 45) { // Key press between 'A'-'Z' or '-'
+        } else if (intKey > 64 && intKey < 91) { // Key press between 'A'-'Z'
             if (puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("1")) {
                 String temp = Character.toString(charKey).toLowerCase();
                 charKey = temp.charAt(0);
@@ -708,18 +713,19 @@ public class Game {
         }
     }
 
-    public void run() throws InterruptedException {
-        menu();
-        puzzle.printBoard(0, 0, true);
-        printWords(17, 0, true);
-        while (!isCompleteGame) {
-            puzzle.printBoard(1, 1, false);
-            printCursor(playerPos.getX(), playerPos.getY());
-            takeKeyPress();
-            Thread.sleep(20);
-        }
+    public void run() throws InterruptedException, IOException {
+        // menu();
+        // puzzle.printBoard(0, 0, true);
+        // printWords(17, 0, true);
+        // while (!isCompleteGame) {
+        //     puzzle.printBoard(1, 1, false);
+        //     printCursor(playerPos.getX(), playerPos.getY());
+        //     takeKeyPress();
+        //     Thread.sleep(20);
+        // }
         // Console.clear();
         // displayHighScoreTable(0, 0, 10);
+        // Output.writeHighScoreTable(highScoreTable, highscorePath);
         // displayUnusedWords(0, 11);
     }
 }
