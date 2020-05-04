@@ -12,8 +12,10 @@ public class Game {
     private SLL wordList;
     private SLL wordCoords;
     private SLL legalCoords;
+    private SLL incorrectCharCoords;
     private MLL checkList; // MLL to check words before they are completed
     private DLL highScoreTable;
+    private int solutionWordCount;
 
     public static final int WINX = 116;
     public static final int WINY = 30;
@@ -23,6 +25,7 @@ public class Game {
 
     private User user1;
     private User user2;
+    private boolean isCompleteGame;
     private boolean turn; // True for user1, false for user2
 
     public Game(String puzzlePath, String solutionPath, String wordPath, String highscorePath) throws Exception {
@@ -36,9 +39,22 @@ public class Game {
         checkList = Input.readCheckList(wordList);
         highScoreTable = Input.readHighScoreTable(highscorePath);
         legalCoords = new SLL();
+        incorrectCharCoords = new SLL();
+        solutionWordCount = countSolutionWords();
 
         playerPos = new Coordinate(7, 7);
         turn = true;
+    }
+
+    private int countSolutionWords() {
+        int count = 0;
+        int listSize = wordList.size();
+        for (int i = 0; i < listSize; i++) {
+            if (((Word) wordList.get(i)).isSolution()) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private void menu() {
@@ -68,7 +84,7 @@ public class Game {
         return name;
     }
 
-    public void printWords(int x, int y, boolean hasDisplayFrame) {
+    private void printWords(int x, int y, boolean hasDisplayFrame) {
         int generalOffset;
         if (hasDisplayFrame) {
             generalOffset = 1;
@@ -130,7 +146,7 @@ public class Game {
     private void displayUnusedWords(int x, int y) {
         int wordSize = wordList.size();
         Console.setCursorPosition(x, y);
-        Console.print("Unused words: ");
+        Console.print("Unused words -> ");
         for (int i = 0; i < wordSize; i++) {
             if (!((Word) wordList.get(i)).isComplete()) {
                 Console.print(((Word) wordList.get(i)).getWord() + " ");
@@ -141,7 +157,17 @@ public class Game {
     private void displayHighScoreTable(int x, int y, int numberOfPlayersToDisplay) {
         highScoreTable.addToEnd(user1);
         highScoreTable.addToEnd(user2);
-        highScoreTable.sort();
+        int size = highScoreTable.size();
+        Object temp;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (((User) highScoreTable.get(i)).getScore() > ((User) highScoreTable.get(j)).getScore()) {
+                    temp = highScoreTable.get(i);
+                    highScoreTable.add(i, highScoreTable.get(j));
+                    highScoreTable.add(j, temp);
+                }
+            }
+        }
         if (numberOfPlayersToDisplay > 0 && numberOfPlayersToDisplay < highScoreTable.size()) {
             for (int i = 0; i < numberOfPlayersToDisplay; i++) {
                 Console.setCursorPosition(x, y + i);
@@ -219,6 +245,17 @@ public class Game {
         }
     }
 
+    private int countCompletedWords() {
+        int count = 0;
+        int listSize = wordList.size();
+        for (int i = 0; i < listSize; i++) {
+            if (((Word) wordList.get(i)).isComplete()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     private boolean isLegalChar(char c) {
         String charToCheck = Character.toString(c);
         if (legalCoords.size() == 0) {
@@ -230,16 +267,20 @@ public class Game {
                 tempCoords.addToEnd(getHorizontalCoords());
             }
             int tempSize = tempCoords.size();
-            boolean flag = false;
+            boolean isLegal = false;
             for (int i = 0; i < tempSize; i++) {
-                flag = checkPattern((Coordinate[]) tempCoords.get(i), charToCheck);
-                if (!flag) {
+                isLegal = checkPattern((Coordinate[]) tempCoords.get(i), charToCheck);
+                if (!isLegal) {
                     break;
                 }
             }
-            if (flag) {
+            if (isLegal) {
                 for (int i = 0; i < tempSize; i++) {
                     legalCoords.addToEnd((Coordinate[]) tempCoords.get(i));
+                }
+                if (!checkRealPattern((Coordinate[]) legalCoords.get(0), charToCheck)) {
+                    Coordinate coord = new Coordinate(playerPos.getX(), playerPos.getY());
+                    incorrectCharCoords.addToEnd(coord);
                 }
                 return true;
             } else {
@@ -286,6 +327,10 @@ public class Game {
                         return false;
                     }
                 }
+                if (!checkRealPattern((Coordinate[]) legalCoords.get(0), charToCheck)) {
+                    Coordinate coord = new Coordinate(playerPos.getX(), playerPos.getY());
+                    incorrectCharCoords.addToEnd(coord);
+                }
                 return true;
             } else {
                 return false;
@@ -320,11 +365,64 @@ public class Game {
                         return false;
                     }
                 }
+                if (!checkRealPattern((Coordinate[]) legalCoords.get(0), charToCheck)) {
+                    Coordinate coord = new Coordinate(playerPos.getX(), playerPos.getY());
+                    incorrectCharCoords.addToEnd(coord);
+                }
                 return true;
             } else {
                 return false;
             }
         }
+    }
+
+    private boolean checkRealPattern(Coordinate[] coords, String ch) {
+        String patternToCheck = "";
+        if (coords[0].getX() == coords[1].getX()) {
+            for (int i = coords[0].getY(); i <= coords[1].getY(); i++) {
+                if (i != playerPos.getY()) {
+                    patternToCheck += puzzle.getBoard()[i][coords[0].getX()];
+                } else {
+                    patternToCheck += ch;
+                }
+            }
+            return hasMatchingRealPattern(coords, patternToCheck);
+        } else if (coords[0].getY() == coords[1].getY()) {
+            for (int i = coords[0].getX(); i <= coords[1].getX(); i++) {
+                if (i != playerPos.getX()) {
+                    patternToCheck += puzzle.getBoard()[coords[0].getY()][i];
+                } else {
+                    patternToCheck += ch;
+                }
+            }
+            return hasMatchingRealPattern(coords, patternToCheck);
+        }
+        return false;
+    }
+
+    private boolean hasMatchingRealPattern(Coordinate[] coords, String pattern) {
+        int listSize = wordList.size();
+        for (int i = 0; i < listSize; i++) {
+            Word word = (Word) wordList.get(i);
+            if (word.isSolution() && word.getCoords() == coords) {
+                String wordStr = word.getWord();
+                int wordLen = wordStr.length();
+                for (int j = 0; j < wordLen; j++) {
+                    char ch = pattern.charAt(j);
+                    if (ch == '1') {
+                        continue;
+                    } else {
+                        char wordCh = wordStr.charAt(j);
+                        if (ch != wordCh) {
+                            return false;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+
+        return true;
     }
 
     private boolean checkPattern(Coordinate[] coords, String ch) {
@@ -361,13 +459,17 @@ public class Game {
                 for (int j = 0; j < innerSize; j++) {
                     flag = true;
                     if (((Word) checkList.getInnerDataAt(i, j)).getWord().length() == pattern.length()) {
+                        Word word = ((Word) checkList.getInnerDataAt(i, j));
+                        String wordStr = word.getWord();
                         for (int k = 0; k < pattern.length(); k++) {
                             char ch = pattern.charAt(k);
+                            char wordCh = wordStr.charAt(k);
                             if (ch == '1') {
                                 continue;
                             } else {
-                                if (ch != ((Word) checkList.getInnerDataAt(i, j)).getWord().charAt(k)) {
+                                if (ch != wordCh) {
                                     flag = false;
+                                    break;
                                 }
                             }
                         }
@@ -388,7 +490,9 @@ public class Game {
         int coordsSize = wordCoords.size();
         for (int i = 0; i < coordsSize; i++) {
             if (playerPos.getX() == ((Coordinate[]) wordCoords.get(i))[0].getX()
-                    && playerPos.getX() == ((Coordinate[]) wordCoords.get(i))[1].getX()) {
+                    && playerPos.getX() == ((Coordinate[]) wordCoords.get(i))[1].getX()
+                    && playerPos.getY() >= ((Coordinate[]) wordCoords.get(i))[0].getY()
+                    && playerPos.getY() <= ((Coordinate[]) wordCoords.get(i))[1].getY()) {
                 return true;
             }
         }
@@ -399,7 +503,9 @@ public class Game {
         int coordsSize = wordCoords.size();
         for (int i = 0; i < coordsSize; i++) {
             if (playerPos.getX() == ((Coordinate[]) wordCoords.get(i))[0].getX()
-                    && playerPos.getX() == ((Coordinate[]) wordCoords.get(i))[1].getX()) {
+                    && playerPos.getX() == ((Coordinate[]) wordCoords.get(i))[1].getX()
+                    && playerPos.getY() >= ((Coordinate[]) wordCoords.get(i))[0].getY()
+                    && playerPos.getY() <= ((Coordinate[]) wordCoords.get(i))[1].getY()) {
                 return ((Coordinate[]) wordCoords.get(i));
             }
         }
@@ -410,7 +516,9 @@ public class Game {
         int coordsSize = wordCoords.size();
         for (int i = 0; i < coordsSize; i++) {
             if (playerPos.getY() == ((Coordinate[]) wordCoords.get(i))[0].getY()
-                    && playerPos.getY() == ((Coordinate[]) wordCoords.get(i))[1].getY()) {
+                    && playerPos.getY() == ((Coordinate[]) wordCoords.get(i))[1].getY()
+                    && playerPos.getX() >= ((Coordinate[]) wordCoords.get(i))[0].getX()
+                    && playerPos.getX() <= ((Coordinate[]) wordCoords.get(i))[1].getX()) {
                 return true;
             }
         }
@@ -421,11 +529,118 @@ public class Game {
         int coordsSize = wordCoords.size();
         for (int i = 0; i < coordsSize; i++) {
             if (playerPos.getY() == ((Coordinate[]) wordCoords.get(i))[0].getY()
-                    && playerPos.getY() == ((Coordinate[]) wordCoords.get(i))[1].getY()) {
+                    && playerPos.getY() == ((Coordinate[]) wordCoords.get(i))[1].getY()
+                    && playerPos.getX() >= ((Coordinate[]) wordCoords.get(i))[0].getX()
+                    && playerPos.getX() <= ((Coordinate[]) wordCoords.get(i))[1].getX()) {
                 return ((Coordinate[]) wordCoords.get(i));
             }
         }
         return null;
+    }
+
+    private boolean isFinalChar(char ch) {
+        if (legalCoords.size() == 1) {
+            String patternToCheck = "";
+            Coordinate[] coords = (Coordinate[]) legalCoords.get(0);
+            if (coords[0].getX() == coords[1].getX()) {
+                for (int i = coords[0].getY(); i <= coords[1].getY(); i++) {
+                    if (i != playerPos.getY()) {
+                        patternToCheck += puzzle.getBoard()[i][coords[0].getX()];
+                    } else {
+                        patternToCheck += ch;
+                    }
+                }
+            } else if (coords[0].getY() == coords[1].getY()) {
+                for (int i = coords[0].getX(); i <= coords[1].getX(); i++) {
+                    if (i != playerPos.getX()) {
+                        patternToCheck += puzzle.getBoard()[coords[0].getY()][i];
+                    } else {
+                        patternToCheck += ch;
+                    }
+                }
+            }
+            return !patternToCheck.contains("1");
+        }
+        return false;
+    }
+
+    private boolean isFinalChar() {
+        if (legalCoords.size() == 1) {
+            String patternToCheck = "";
+            Coordinate[] coords = (Coordinate[]) legalCoords.get(0);
+            if (coords[0].getX() == coords[1].getX()) {
+                for (int i = coords[0].getY(); i <= coords[1].getY(); i++) {
+                    patternToCheck += puzzle.getBoard()[i][coords[0].getX()];
+                }
+            } else if (coords[0].getY() == coords[1].getY()) {
+                for (int i = coords[0].getX(); i <= coords[1].getX(); i++) {
+                    patternToCheck += puzzle.getBoard()[coords[0].getY()][i];
+                }
+            }
+            return !patternToCheck.contains("1");
+        }
+        return false;
+    }
+
+    private boolean isCorrectWord() {
+        String wordToCheck = "";
+        Coordinate[] coords = (Coordinate[]) legalCoords.get(0);
+        if (coords[0].getX() == coords[1].getX()) {
+            for (int i = coords[0].getY(); i <= coords[1].getY(); i++) {
+                wordToCheck += puzzle.getBoard()[i][coords[0].getX()];
+            }
+        } else if (coords[0].getY() == coords[1].getY()) {
+            for (int i = coords[0].getX(); i <= coords[1].getX(); i++) {
+                wordToCheck += puzzle.getBoard()[coords[0].getY()][i];
+            }
+        }
+
+        int listSize = wordList.size();
+        for (int i = 0; i < listSize; i++) {
+            Word currWord = (Word) wordList.get(i);
+            if ((Coordinate[]) legalCoords.get(0) == currWord.getCoords()) {
+                return wordToCheck.equalsIgnoreCase(currWord.getWord());
+            }
+        }
+        return false;
+    }
+
+    private Word getFinishedWord() {
+        int listSize = wordList.size();
+        for (int i = 0; i < listSize; i++) {
+            if (((Word) wordList.get(i)).getCoords() == legalCoords.get(0)) {
+                return (Word) wordList.get(i);
+            }
+        }
+        return null;
+    }
+
+    private void removeWordFromMLL(Word w) {
+        int outerSize = checkList.outerSize();
+        boolean flag = false;
+        for (int i = 0; i < outerSize; i++) {
+            if (((char) checkList.getOuterDataAt(i) == w.getWord().charAt(0))) {
+                int innerSize = checkList.innerSize(checkList.getOuterDataAt(i));
+                for (int j = 0; j < innerSize; j++) {
+                    if (((Word) checkList.getInnerDataAt(i, j)) == w) {
+                        checkList.removeInnerAt(i, j);
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag) {
+                    break;
+                }
+            }
+        }
+    }
+
+    private void removeIncorrectLetters() {
+        int incWordCount = incorrectCharCoords.size();
+        for (int i = 0; i < incWordCount; i++) {
+            Coordinate coords = (Coordinate) incorrectCharCoords.get(i);
+            puzzle.getBoard()[coords.getY()][coords.getX()] = "1";
+        }
     }
 
     private void takeKeyPress() throws InterruptedException {
@@ -442,35 +657,69 @@ public class Game {
             playerPos.setX(playerPos.getX() - 1);
         } else if (intKey == KeyEvent.VK_RIGHT && playerPos.getX() < Board.ROWLENGTH - 1) {
             playerPos.setX(playerPos.getX() + 1);
-        } else if (intKey > 64 && intKey < 91) { // Key press between A-Z
-            //TODO: chracter check algorithm
-            String temp = Character.toString(charKey).toLowerCase();
-            charKey = temp.charAt(0);
-            if (isLegalChar(charKey)) {
-                //TODO: add +1 points to the current user
-                puzzle.getBoard()[playerPos.getY()][playerPos.getX()] = Character.toString(charKey);
-                //TODO: check if the placed char is the final char of the word
-            } else {
-                turn = !turn; // change turns
-
+        } else if (intKey > 64 && intKey < 91 || intKey == 45) { // Key press between 'A'-'Z' or '-'
+            if (puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("1")) {
+                String temp = Character.toString(charKey).toLowerCase();
+                charKey = temp.charAt(0);
+                if (isLegalChar(charKey)) {
+                    //TODO: add +1 points to the current user
+                    puzzle.getBoard()[playerPos.getY()][playerPos.getX()] = Character.toString(charKey);
+                    //TODO: check if the placed char is the final char of the word
+                    if (isFinalChar()) {
+                        if (isCorrectWord()) {
+                            //TODO: Add +10 points to the current user
+                            puzzle.printBoard(1, 1, false);
+                            Word word = getFinishedWord();
+                            word.setComplete(true);
+                            askWordMeaning(word);
+                            if (countCompletedWords() == solutionWordCount) {
+                                isCompleteGame = true;
+                            }
+                            removeWordFromMLL(word);
+                        } else {
+                            // and -2 points per char removed
+                            removeIncorrectLetters();
+                        }
+                        incorrectCharCoords.empty();
+                        legalCoords.empty();
+                        Console.clear();
+                        puzzle.printBoard(0, 0, true);
+                        printWords(17, 0, true);
+                    }
+                } else {
+                    /**
+                     * IMPORTANT!!!
+                     * This if condition covers the possibility for the final character of an incorrect word has been placed
+                     * which intersects with another word, THIS IS AN EXTREME CASE AND MUST BE ASKED TO THE TEACHER TO KNOW HOW TO
+                     * HANDLE IT!!!
+                     */
+                    if (isFinalChar(charKey)) {
+                        String charToCheck = Character.toString(charKey);
+                        if (checkPattern((Coordinate[]) legalCoords.get(0), charToCheck)) {
+                            // -2 points per char removed
+                            removeIncorrectLetters();
+                            legalCoords.empty();
+                            incorrectCharCoords.empty();
+                        }
+                    }
+                    turn = !turn; // change turns
+                }
             }
         }
     }
 
     public void run() throws InterruptedException {
-        // menu();
+        menu();
         puzzle.printBoard(0, 0, true);
-        // solution.printBoard(17, 0, true);
         printWords(17, 0, true);
-        // askWordMeaning((Word) wordList.get(0));
-        while (true) {
+        while (!isCompleteGame) {
             puzzle.printBoard(1, 1, false);
             printCursor(playerPos.getX(), playerPos.getY());
             takeKeyPress();
             Thread.sleep(20);
         }
-        // displayUnusedWords(0, 0);
-        // checkList.display(Console.greenonblack);
+        // Console.clear();
         // displayHighScoreTable(0, 0, 10);
+        // displayUnusedWords(0, 11);
     }
 }
