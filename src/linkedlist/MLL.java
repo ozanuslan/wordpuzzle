@@ -238,34 +238,16 @@ public class MLL {
         return i.getData();
     }
 
-    public void display() {
-        if (head != null) {
-            OuterNode oTemp = head;
-            while (oTemp != null) {
-                Console.print(oTemp.getData() + " --> ");
-                Node iTemp = oTemp.getRight();
-                while (iTemp != null) {
-                    Console.print(((Word) iTemp.getData()).getWord() + " ");
-                    iTemp = iTemp.getNext();
-                }
-                oTemp = oTemp.getDown();
-                Console.println("");
-            }
-        }
-    }
-
-    public void display(TextAttributes t) {
-        if (head != null) {
-            OuterNode oTemp = head;
-            while (oTemp != null) {
-                Console.print(oTemp.getData() + " --> ", t);
-                Node iTemp = oTemp.getRight();
-                while (iTemp != null) {
-                    Console.print(((Word) iTemp.getData()).getWord() + " ", t);
-                    iTemp = iTemp.getNext();
-                }
-                oTemp = oTemp.getDown();
-                Console.println("");
+    public void removeInnerAt(int outerIndex, int innerIndex) {
+        OuterNode oTemp = getOuterAt(outerIndex);
+        if(innerIndex == 0){
+            oTemp.setRight(oTemp.getRight().getNext());
+        } else{
+            Node iTemp = getInnerAt(outerIndex, innerIndex-1);
+            if(innerIndex == innerSize(getOuterDataAt(outerIndex))-1){
+                iTemp.setNext(null);
+            } else{
+                iTemp.setNext(iTemp.getNext().getNext());
             }
         }
     }
