@@ -2,7 +2,6 @@ package linkedlist;
 
 import enigma.console.TextAttributes;
 import game.Console;
-import game.Word;
 
 public class SLL {
     public class Node {
