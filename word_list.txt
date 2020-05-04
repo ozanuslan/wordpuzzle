@@ -76,7 +76,7 @@ supersede,yerini almak
 minor,küçük
 all,tümü
 identity,özdeşlik
-en-dash,orta çizgi
+dash,orta çizgi
 percent,yüzde
 appendix,ek
 symbol,simge
