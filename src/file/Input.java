@@ -79,7 +79,17 @@ public class Input {
                 }
             }
 
-            sllWordList.sort();
+            int size = sllWordList.size();
+            Object temp;
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    if (((Word) sllWordList.get(i)).getWord().compareTo(((Word) sllWordList.get(j)).getWord()) < 0) {
+                        temp = sllWordList.get(i);
+                        sllWordList.add(i, sllWordList.get(j));
+                        sllWordList.add(j, temp);
+                    }
+                }
+            }
 
             if (errorList.size() > 0) {
                 Console.setCursorPosition(0, 20);
