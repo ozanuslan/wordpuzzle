@@ -1,9 +1,9 @@
 package game;
 
 public class Word {
-    String word, meaning;
-    boolean isComplete, isSolution;
-    Coordinate[] coords;
+    private String word, meaning;
+    private boolean isComplete, isSolution;
+    private Coordinate[] coords;
     
     public Word(String word, String meaning) {
         this.word = word;
