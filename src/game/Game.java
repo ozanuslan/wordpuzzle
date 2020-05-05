@@ -93,7 +93,7 @@ public class Game {
     private void displayUserInfo(int x, int y) {
         String stringToPrint = user1.getName() + ": " + user1.getScore() + "   " + user2.getName() + ": "
                 + user2.getScore() + "   " + "Turn: ";
-        if (turn) {
+        if (user1.getName().length() > user2.getName().length()) {
             stringToPrint += user1.getName();
         } else {
             stringToPrint += user2.getName();
@@ -228,7 +228,7 @@ public class Game {
                         + ((User) highScoreTable.get(i)).getScore());
             }
         }
-        int frameRowCount = numberOfPlayersToDisplay+2;
+        int frameRowCount = numberOfPlayersToDisplay + 2;
         int frameRowLength = longestString + 2;
         for (int i = 0; i < frameRowCount; i++) {
             for (int j = 0; j < frameRowLength; j++) {
