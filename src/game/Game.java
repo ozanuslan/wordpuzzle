@@ -10,6 +10,7 @@ import java.util.Random;
 public class Game {
     private Board puzzle;
     private Board solution;
+
     private SLL wordList;
     private SLL wordCoords;
     private SLL legalCoords;
@@ -38,7 +39,7 @@ public class Game {
         solution = new Board(solutionPath);
         wordList = Input.readWordList(wordPath);
         wordCoords = Input.getSolutionWordCoords(puzzle);
-        Input.markSolutionWords(solution, wordCoords, wordList); //Sets words in the wordlist as solution if they exist in solution board
+        Input.markSolutionWords(solution, wordCoords, wordList); //Sets words in the wordList, and checkList as solution if they exist in the solution board
         checkList = Input.readCheckList(wordList);
         highScoreTable = Input.readHighScoreTable(highscorePath);
         legalCoords = new SLL();
@@ -89,7 +90,50 @@ public class Game {
         return name;
     }
 
-    private void printWords(int x, int y, boolean hasDisplayFrame) {
+    private void displayUserInfo(int x, int y) {
+        String stringToPrint = user1.getName() + ": " + user1.getScore() + "   " + user2.getName() + ": "
+                + user2.getScore() + "   " + "Turn: ";
+        if (turn) {
+            stringToPrint += user1.getName();
+        } else {
+            stringToPrint += user2.getName();
+        }
+        Console.setCursorPosition(x, y);
+        Console.print("                                                                       ");
+        Console.setCursorPosition(x, y);
+        Console.print(user1.getName() + ": " + user1.getScore() + "   ");
+        Console.print(user2.getName() + ": " + user2.getScore() + "   ");
+        Console.print("Turn: ");
+        if (turn) {
+            Console.print(user1.getName(), Console.greenonblack);
+        } else {
+            Console.print(user2.getName(), Console.redonblack);
+        }
+
+        int frameRowCount = 3;
+        int frameRowLength = stringToPrint.length() + 2;
+        for (int i = 0; i < frameRowCount; i++) {
+            for (int j = 0; j < frameRowLength; j++) {
+                Console.setCursorPosition(x - 1 + j, y - 1 + i);
+                if (i == 0 && j == 0) {
+                    Console.print("╔");
+                } else if (i == 0 && j == frameRowLength - 1) {
+                    Console.print("╗");
+                } else if (i == frameRowCount - 1 && j == 0) {
+                    Console.print("╚");
+                } else if (i == frameRowCount - 1 && j == frameRowLength - 1) {
+                    Console.print("╝");
+                } else if ((i == 0 && j > 0 && j < frameRowLength - 1)
+                        || (i == frameRowCount - 1 && j > 0 && j < frameRowLength - 1)) {
+                    Console.print("═");
+                } else if ((j == 0 || j == frameRowLength - 1) && (i > 0 && i < frameRowCount - 1)) {
+                    Console.print("║");
+                }
+            }
+        }
+    }
+
+    private void displayWords(int x, int y, boolean hasDisplayFrame) {
         int generalOffset;
         if (hasDisplayFrame) {
             generalOffset = 1;
@@ -173,22 +217,58 @@ public class Game {
                 }
             }
         }
+        int longestString = 0;
         if (numberOfPlayersToDisplay > 0 && numberOfPlayersToDisplay < highScoreTable.size()) {
             for (int i = 0; i < numberOfPlayersToDisplay; i++) {
+                String stringToPrint = (i + 1) + " " + ((User) highScoreTable.get(i)).getName() + " "
+                        + ((User) highScoreTable.get(i)).getScore();
+                longestString = Math.max(longestString, stringToPrint.length());
                 Console.setCursorPosition(x, y + i);
                 Console.print((i + 1) + " " + ((User) highScoreTable.get(i)).getName() + " "
                         + ((User) highScoreTable.get(i)).getScore());
             }
         }
+        int frameRowCount = numberOfPlayersToDisplay+2;
+        int frameRowLength = longestString + 2;
+        for (int i = 0; i < frameRowCount; i++) {
+            for (int j = 0; j < frameRowLength; j++) {
+                Console.setCursorPosition(x - 1 + j, y - 1 + i);
+                if (i == 0 && j == 0) {
+                    Console.print("╔");
+                } else if (i == 0 && j == frameRowLength - 1) {
+                    Console.print("╗");
+                } else if (i == frameRowCount - 1 && j == 0) {
+                    Console.print("╚");
+                } else if (i == frameRowCount - 1 && j == frameRowLength - 1) {
+                    Console.print("╝");
+                } else if ((i == 0 && j > 0 && j < frameRowLength - 1)
+                        || (i == frameRowCount - 1 && j > 0 && j < frameRowLength - 1)) {
+                    Console.print("═");
+                } else if ((j == 0 || j == frameRowLength - 1) && (i > 0 && i < frameRowCount - 1)) {
+                    Console.print("║");
+                }
+            }
+        }
     }
 
     private void printCursor(int px, int py) {
+
         Console.setCursorPosition(playerPos.getX() + 1, playerPos.getY() + 1);
-        if (puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("0")
-                || puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("1")) {
-            Console.print("█", Console.greenonblack);
+        if (turn) {
+            if (puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("0")
+                    || puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("1")) {
+                Console.print("█", Console.greenonblack);
+            } else {
+                Console.print(puzzle.getBoard()[playerPos.getY()][playerPos.getX()].toUpperCase(),
+                        Console.blackongreen);
+            }
         } else {
-            Console.print(puzzle.getBoard()[playerPos.getY()][playerPos.getX()].toUpperCase(), Console.blackongreen);
+            if (puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("0")
+                    || puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("1")) {
+                Console.print("█", Console.redonblack);
+            } else {
+                Console.print(puzzle.getBoard()[playerPos.getY()][playerPos.getX()].toUpperCase(), Console.blackonred);
+            }
         }
     }
 
@@ -216,9 +296,9 @@ public class Game {
             }
         }
 
-        Console.setCursorPosition(1, Board.ROWCOUNT + 3);
+        Console.setCursorPosition(1, Board.ROWCOUNT + 6);
         Console.println("What is the meaning of " + w.getWord() + " in Turkish? Please enter your option.");
-        Console.setCursorPosition(1, Board.ROWCOUNT + 4);
+        Console.setCursorPosition(1, Board.ROWCOUNT + 7);
         for (int i = 0; i < options.length; i++) {
             Console.print(Character.toString(i + 65) + ") " + options[i] + " ");
         }
@@ -228,10 +308,10 @@ public class Game {
         String ans = "";
         while (!isValidAns) {
             for (int i = 0; i < ans.length(); i++) {
-                Console.setCursorPosition(i + 9, Board.ROWCOUNT + 5);
+                Console.setCursorPosition(i + 9, Board.ROWCOUNT + 8);
                 Console.print(" ");
             }
-            Console.setCursorPosition(1, Board.ROWCOUNT + 5);
+            Console.setCursorPosition(1, Board.ROWCOUNT + 8);
             Console.print("Answer: ");
             ans = Console.readLine();
             if (ans.length() != 1) {
@@ -246,7 +326,12 @@ public class Game {
             }
         }
         if ((ans.charAt(0) - 65 == ansIndex) || (ans.charAt(0) - 97 == ansIndex)) {
-            //TODO: Add +10 points to the current user
+            if (turn) {
+                user1.setScore(user1.getScore() + 10);
+            } else {
+                user2.setScore(user2.getScore() + 10);
+            }
+            displayUserInfo(1, Board.ROWCOUNT + 3);
         }
     }
 
@@ -667,12 +752,22 @@ public class Game {
                 String temp = Character.toString(charKey).toLowerCase();
                 charKey = temp.charAt(0);
                 if (isLegalChar(charKey)) {
-                    //TODO: add +1 points to the current user
+                    if (turn) {
+                        user1.setScore(user1.getScore() + 1);
+                    } else {
+                        user2.setScore(user2.getScore() + 1);
+                    }
+                    displayUserInfo(1, Board.ROWCOUNT + 3);
                     puzzle.getBoard()[playerPos.getY()][playerPos.getX()] = Character.toString(charKey);
-                    //TODO: check if the placed char is the final char of the word
+
                     if (isFinalChar()) {
                         if (isCorrectWord()) {
-                            //TODO: Add +10 points to the current user
+                            if (turn) {
+                                user1.setScore(user1.getScore() + 10);
+                            } else {
+                                user2.setScore(user2.getScore() + 10);
+                            }
+                            displayUserInfo(1, Board.ROWCOUNT + 3);
                             puzzle.printBoard(1, 1, false);
                             Word word = getFinishedWord();
                             word.setComplete(true);
@@ -682,50 +777,56 @@ public class Game {
                             }
                             removeWordFromMLL(word);
                         } else {
-                            // and -2 points per char removed
+                            if (turn) {
+                                user1.setScore(user1.getScore() - (2 * incorrectCharCoords.size()));
+                            } else {
+                                user2.setScore(user2.getScore() - (2 * incorrectCharCoords.size()));
+                            }
+                            displayUserInfo(1, Board.ROWCOUNT + 3);
                             removeIncorrectLetters();
                         }
                         incorrectCharCoords.empty();
                         legalCoords.empty();
                         Console.clear();
                         puzzle.printBoard(0, 0, true);
-                        printWords(17, 0, true);
+                        displayWords(17, 0, true);
                     }
                 } else {
-                    /**
-                     * IMPORTANT!!!
-                     * This if condition covers the possibility for the final character of an incorrect word has been placed
-                     * which intersects with another word, THIS IS AN EXTREME CASE AND MUST BE ASKED TO THE TEACHER TO KNOW HOW TO
-                     * HANDLE IT!!!
-                     */
                     if (isFinalChar(charKey)) {
                         String charToCheck = Character.toString(charKey);
                         if (checkPattern((Coordinate[]) legalCoords.get(0), charToCheck)) {
-                            // -2 points per char removed
+                            if (turn) {
+                                user1.setScore(user1.getScore() - (2 * incorrectCharCoords.size()));
+                            } else {
+                                user2.setScore(user2.getScore() - (2 * incorrectCharCoords.size()));
+                            }
+                            displayUserInfo(1, Board.ROWCOUNT + 3);
                             removeIncorrectLetters();
                             legalCoords.empty();
                             incorrectCharCoords.empty();
                         }
                     }
                     turn = !turn; // change turns
+                    displayUserInfo(1, Board.ROWCOUNT + 3);
                 }
             }
         }
     }
 
     public void run() throws InterruptedException, IOException {
-        // menu();
-        // puzzle.printBoard(0, 0, true);
-        // printWords(17, 0, true);
-        // while (!isCompleteGame) {
-        //     puzzle.printBoard(1, 1, false);
-        //     printCursor(playerPos.getX(), playerPos.getY());
-        //     takeKeyPress();
-        //     Thread.sleep(20);
-        // }
-        // Console.clear();
-        // displayHighScoreTable(0, 0, 10);
-        // Output.writeHighScoreTable(highScoreTable, highscorePath);
-        // displayUnusedWords(0, 11);
+        menu();
+        puzzle.printBoard(0, 0, true);
+        displayWords(17, 0, true);
+        while (!isCompleteGame) {
+            puzzle.printBoard(1, 1, false);
+            printCursor(playerPos.getX(), playerPos.getY());
+            displayUserInfo(1, Board.ROWCOUNT + 3);
+            takeKeyPress();
+            Thread.sleep(20);
+        }
+        Console.clear();
+        displayHighScoreTable(1, 1, 10);
+        Output.writeHighScoreTable(highScoreTable, highscorePath);
+        displayUnusedWords(0, 12);
     }
 }
