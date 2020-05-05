@@ -15,8 +15,8 @@ public class Console {
 
     public static final TextAttributes greenonblack = new TextAttributes(Color.GREEN);
     public static final TextAttributes redonblack = new TextAttributes(Color.RED);
-    public static final TextAttributes blueonblack = new TextAttributes(Color.BLUE);
     public static final TextAttributes blackongreen = new TextAttributes(Color.BLACK, Color.GREEN);
+    public static final TextAttributes blackonred = new TextAttributes(Color.BLACK, Color.RED);
 
     public static void setup() throws Exception { // --- Contructor
         // ------ Standard code for mouse and keyboard ------ Do not change
