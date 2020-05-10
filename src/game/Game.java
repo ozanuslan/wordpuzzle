@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.Random;
 
 public class Game {
+    public static final int DICTIONARYLIMIT = 100;
+    public static final int HIGHSCOREPLAYERLIMIT = 10;
+
     private Board puzzle;
     private Board solution;
 
@@ -814,6 +817,11 @@ public class Game {
     }
 
     public void run() throws InterruptedException, IOException {
+        if(Input.ERRORLIST.size() > 0){
+            Input.ERRORLIST.display(Console.redonblack);
+            Console.print("Press enter to continue...");
+            Console.readLine();
+        }
         menu();
         puzzle.printBoard(0, 0, true);
         displayWords(17, 0, true);
