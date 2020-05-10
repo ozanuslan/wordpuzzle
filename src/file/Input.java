@@ -8,8 +8,7 @@ import linkedlist.*;
 import game.*;
 
 public class Input {
-    public static final int DICTIONARYLIMIT = 100;
-    public static final int HIGHSCOREPLAYERLIMIT = 10;
+    public static SLL ERRORLIST = new SLL();
 
     private static boolean tryParseInt(String s) {
         try {
@@ -58,21 +57,20 @@ public class Input {
             Scanner sc = new Scanner(new File(wordPath));
             int lineCount = 0;
             String[] wordData;
-            SLL errorList = new SLL();
             while (sc.hasNextLine()) {
                 lineCount++;
-                if (lineCount > DICTIONARYLIMIT) {
+                if (lineCount > Game.DICTIONARYLIMIT) {
                     Console.setCursorPosition(0, 20);
-                    Console.print("Dictionary word limit has been exceed, words coming after the " + DICTIONARYLIMIT
+                    Console.print("Dictionary word limit has been exceed, words coming after the " + Game.DICTIONARYLIMIT
                             + "th word will not be included in the game.", Console.redonblack);
                     break;
                 }
                 wordData = sc.nextLine().split("\\,");
                 if (wordData.length != 2) {
-                    errorList.addToEnd(lineCount);
+                    ERRORLIST.addToEnd(lineCount);
                 } else {
                     if (wordData[0].length() < 2 || wordData[1].length() < 2) {
-                        errorList.addToEnd(lineCount);
+                        ERRORLIST.addToEnd(lineCount);
                     } else {
                         sllWordList.addToEnd(new Word(wordData[0].toLowerCase(), wordData[1]));
                     }
@@ -91,11 +89,10 @@ public class Input {
                 }
             }
 
-            if (errorList.size() > 0) {
+            if (ERRORLIST.size() > 0) {
                 Console.setCursorPosition(0, 20);
                 Console.print("Incorrect word(s) in " + wordPath.substring(0, wordPath.indexOf(".")) + " on line(s): ",
                         Console.redonblack);
-                errorList.display();
             }
         } catch (FileNotFoundException e) {
             Console.println(e.toString(), Console.redonblack);
@@ -134,10 +131,10 @@ public class Input {
             SLL errorList = new SLL();
             while (sc.hasNextLine()) {
                 playerCount++;
-                if (playerCount > HIGHSCOREPLAYERLIMIT) {
+                if (playerCount > Game.HIGHSCOREPLAYERLIMIT) {
                     Console.setCursorPosition(0, 30);
                     Console.print(highscorePath.substring(0, highscorePath.indexOf(".")) + " has more than "
-                            + HIGHSCOREPLAYERLIMIT + " players. Players exceeding the limit will not be considered.",
+                            + Game.HIGHSCOREPLAYERLIMIT + " players. Players exceeding the limit will not be considered.",
                             Console.redonblack);
                 } else {
                     playerData = sc.nextLine().split(";");
