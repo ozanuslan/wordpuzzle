@@ -61,8 +61,8 @@ public class Input {
                 lineCount++;
                 if (lineCount > Game.DICTIONARYLIMIT) {
                     Console.setCursorPosition(0, 20);
-                    Console.print("Dictionary word limit has been exceed, words coming after the " + Game.DICTIONARYLIMIT
-                            + "th word will not be included in the game.", Console.redonblack);
+                    Console.print("Dictionary word limit has been exceed, words coming after the "
+                            + Game.DICTIONARYLIMIT + "th word will not be included in the game.", Console.redonblack);
                     break;
                 }
                 wordData = sc.nextLine().split("\\,");
@@ -133,8 +133,10 @@ public class Input {
                 playerCount++;
                 if (playerCount > Game.HIGHSCOREPLAYERLIMIT) {
                     Console.setCursorPosition(0, 30);
-                    Console.print(highscorePath.substring(0, highscorePath.indexOf(".")) + " has more than "
-                            + Game.HIGHSCOREPLAYERLIMIT + " players. Players exceeding the limit will not be considered.",
+                    Console.print(
+                            highscorePath.substring(0, highscorePath.indexOf(".")) + " has more than "
+                                    + Game.HIGHSCOREPLAYERLIMIT
+                                    + " players. Players exceeding the limit will not be considered.",
                             Console.redonblack);
                 } else {
                     playerData = sc.nextLine().split(";");
@@ -164,17 +166,17 @@ public class Input {
         boolean wordExists;
         for (int i = 0; i < coordCount; i++) {
             solutionWord = findWordOnCoords((Coordinate[]) solutionWordCoords.get(i), solution);
+            wordExists = false;
             for (int j = 0; j < listSize; j++) {
-                wordExists = false;
                 if (solutionWord.equalsIgnoreCase(((Word) wordList.get(j)).getWord())) {
                     ((Word) wordList.get(j)).setSolution(true);
                     ((Word) wordList.get(j)).setCoords((Coordinate[]) solutionWordCoords.get(i));
                     wordExists = true;
                     break;
                 }
-                if(!wordExists){ // Removes edge cases, where coordinates for a word has been found but word doesn't exist in the solution 
-                    solutionWordCoords.delete(solutionWordCoords.get(i));
-                }
+            }
+            if (!wordExists) { // Removes edge cases, where coordinates for a word has been found but word doesn't exist in the solution 
+                solutionWordCoords.delete(solutionWordCoords.get(i));
             }
         }
     }
