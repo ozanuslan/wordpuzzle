@@ -159,15 +159,21 @@ public class Input {
 
     public static void markSolutionWords(Board solution, SLL solutionWordCoords, SLL wordList) {
         int coordCount = solutionWordCoords.size();
-        int wordSize = wordList.size();
+        int listSize = wordList.size();
         String solutionWord;
+        boolean wordExists;
         for (int i = 0; i < coordCount; i++) {
             solutionWord = findWordOnCoords((Coordinate[]) solutionWordCoords.get(i), solution);
-            for (int j = 0; j < wordSize; j++) {
+            for (int j = 0; j < listSize; j++) {
+                wordExists = false;
                 if (solutionWord.equalsIgnoreCase(((Word) wordList.get(j)).getWord())) {
                     ((Word) wordList.get(j)).setSolution(true);
                     ((Word) wordList.get(j)).setCoords((Coordinate[]) solutionWordCoords.get(i));
+                    wordExists = true;
                     break;
+                }
+                if(!wordExists){ // Removes edge cases, where coordinates for a word has been found but word doesn't exist in the solution 
+                    solutionWordCoords.delete(solutionWordCoords.get(i));
                 }
             }
         }
