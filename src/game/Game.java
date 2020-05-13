@@ -785,6 +785,12 @@ public class Game {
                             } else {
                                 user2.setScore(user2.getScore() - (2 * incorrectCharCoords.size()));
                             }
+                            Console.setCursorPosition(30, 17);
+                            Console.print(
+                                    "The word is incorrect! Wrong letters will be removed! -2 points per letter removed.");
+                            Thread.sleep(2000);
+                            Console.print(
+                                    "                                                                                   ");
                             displayUserInfo(1, Board.ROWCOUNT + 3);
                             removeIncorrectLetters();
                         }
@@ -792,7 +798,7 @@ public class Game {
                         legalCoords.empty();
                         Console.clear();
                         puzzle.printBoard(0, 0, true);
-                        displayWords(17, 0, true);
+                        displayWords(Board.ROWLENGTH + 2, 0, true);
                     }
                 } else {
                     if (isFinalChar(charKey)) {
@@ -803,6 +809,12 @@ public class Game {
                             } else {
                                 user2.setScore(user2.getScore() - (2 * incorrectCharCoords.size()));
                             }
+                            Console.setCursorPosition(30, 17);
+                            Console.print(
+                                    "The word is incorrect! Wrong letters will be removed! -2 points per letter removed.");
+                            Thread.sleep(2000);
+                            Console.print(
+                                    "                                                                                   ");
                             displayUserInfo(1, Board.ROWCOUNT + 3);
                             removeIncorrectLetters();
                             legalCoords.empty();
@@ -817,7 +829,7 @@ public class Game {
     }
 
     public void run() throws InterruptedException, IOException {
-        if(Input.ERRORLIST.size() > 0){
+        if (Input.ERRORLIST.size() > 0) {
             Input.ERRORLIST.display(Console.redonblack);
             Console.print("Press enter to continue...");
             Console.readLine();
