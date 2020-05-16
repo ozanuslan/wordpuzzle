@@ -38,6 +38,7 @@ public class Console {
         // ----------------------------------------------------
     }
 
+    // Returns the ascii value of the key pressed
     public static int takeKeyPress() {
         if (keypr == 1) { // if keyboard button pressed
             keypr = 0;
@@ -46,30 +47,37 @@ public class Console {
         return 0;
     }
 
-    public static void getConsole(String title, int xSize, int ySize, int fontSize, int fontNo) {
+    // Creates an instance of enigma console
+    public static void getConsole(String title, int xSize, int ySize, int fontSize, int fontNo) { 
         c = Enigma.getConsole(title, xSize, ySize, fontSize, fontNo);
     }
 
+    // Println with no textattribute
     public static void println(String str) {
         c.getTextWindow().output(str + "\n");
     }
 
+    // Println with textattribute
     public static void println(String str, TextAttributes t) {
         c.getTextWindow().output(str + "\n", t);
     }
 
+    // Print with no textattribute
     public static void print(String str) {
         c.getTextWindow().output(str);
     }
 
+    // Print with textattribute
     public static void print(String str, TextAttributes t) {
         c.getTextWindow().output(str, t);
     }
 
+    // Sets the cursor position
     public static void setCursorPosition(int x, int y) {
         c.getTextWindow().setCursorPosition(x, y);
     }
 
+    // Clears the console
     public static void clear(){
         for(int i = 0; i < Game.WINY - 1; i++){
             for(int j = 0; j < Game.WINX; j++){
@@ -79,6 +87,7 @@ public class Console {
         }
     }
 
+    // Reads a string and returns it
     public static String readLine(){
         Scanner sc = new Scanner(System.in);
         String s = sc.nextLine();

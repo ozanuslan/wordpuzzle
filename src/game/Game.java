@@ -55,6 +55,7 @@ public class Game {
         turn = true;
     }
 
+    // Counts how many solution words are there in the list
     private int countSolutionWords() {
         int count = 0;
         int listSize = wordList.size();
@@ -66,6 +67,7 @@ public class Game {
         return count;
     }
 
+    // Menu, takes usernames from the users
     private void menu() {
         Console.println("Welcome to Word-Puzzle!");
         Console.print("What is player1's name? ");
@@ -75,10 +77,11 @@ public class Game {
         Console.clear();
     }
 
+    // Returns a username, asks for a username until a legal one is entered
     private String takeUsername() {
         String name = "";
-        boolean isLegitName = false;
-        while (!isLegitName) {
+        boolean isLegalName = false;
+        while (!isLegalName) {
             name = Console.readLine();
             if (name.length() < 2) {
                 Console.println("Username cannot be shorter than 2", Console.redonblack);
@@ -87,13 +90,15 @@ public class Game {
                 Console.println("Username cannot be longer than 10", Console.redonblack);
                 Console.print("Please enter a legal username: ");
             } else {
-                isLegitName = true;
+                isLegalName = true;
             }
         }
         return name;
     }
 
+    // Displays user information at given coordinates
     private void displayUserInfo(int x, int y) {
+        // This string stores the length of the string that will be printed on the board, this is stored so the length of the frame can be adjusted accordingly
         String stringToPrint = user1.getName() + ": " + user1.getScore() + "   " + user2.getName() + ": "
                 + user2.getScore() + "   " + "Turn: ";
         if (user1.getName().length() > user2.getName().length()) {
@@ -101,8 +106,13 @@ public class Game {
         } else {
             stringToPrint += user2.getName();
         }
+        //
+
+        // Clear last printed info
         Console.setCursorPosition(x, y);
         Console.print("                                                                       ");
+
+        //Display current info
         Console.setCursorPosition(x, y);
         Console.print(user1.getName() + ": " + user1.getScore() + "   ");
         Console.print(user2.getName() + ": " + user2.getScore() + "   ");
@@ -113,6 +123,7 @@ public class Game {
             Console.print(user2.getName(), Console.redonblack);
         }
 
+        // Print the frame
         int frameRowCount = 3;
         int frameRowLength = stringToPrint.length() + 2;
         for (int i = 0; i < frameRowCount; i++) {
@@ -136,38 +147,43 @@ public class Game {
         }
     }
 
+    // Displays every word in the list
     private void displayWords(int x, int y, boolean hasDisplayFrame) {
         int generalOffset;
-        if (hasDisplayFrame) {
-            generalOffset = 1;
+        if (hasDisplayFrame) { // If has a frame
+            generalOffset = 1; // Add 1 to the word print offset
         } else {
-            generalOffset = 0;
+            generalOffset = 0; 
         }
         int listSize = wordList.size();
-        int maxWordLen = -1;
+        int maxWordLen = -1; // Maximum length of the word printed on a given column
         int rowOffset = 0;
         int columnOffset = 0;
         for (int i = 0; i < listSize; i++) {
             // if (((Word) wordList.get(i)).isSolution()) {
             Console.setCursorPosition(x + generalOffset + columnOffset, y + generalOffset + rowOffset);
-            if (((Word) wordList.get(i)).isComplete()) {
+            if (((Word) wordList.get(i)).isComplete()) { // If the word is complete
                 Console.print("[X]" + ((Word) wordList.get(i)).getWord().toUpperCase(), Console.greenonblack);
-            } else {
+            } else { // If the word isn't complete
                 Console.print("[ ]" + ((Word) wordList.get(i)).getWord().toUpperCase());
             }
-            rowOffset++;
-            maxWordLen = Math.max(maxWordLen, ((Word) wordList.get(i)).getWord().length());
-            if (rowOffset >= Board.ROWCOUNT && i != listSize - 1) {
-                rowOffset = 0;
-                columnOffset += maxWordLen + 3;
-                maxWordLen = 0;
+            rowOffset++; // Go one line down
+            maxWordLen = Math.max(maxWordLen, ((Word) wordList.get(i)).getWord().length()); // Record the longest word on the column
+
+            if (rowOffset >= Board.ROWCOUNT && i != listSize - 1) { // If the y coordinate has reached the board height
+                rowOffset = 0; // Return back to the start of the row
+                columnOffset += maxWordLen + 3; // Move the cursor right for max length of word on the column
+                maxWordLen = 0; // Reset the max length
             }
             // }
         }
-        columnOffset += maxWordLen;
-        printWordFrame(x, y, columnOffset);
+        columnOffset += maxWordLen; // Add the longest word for one last time
+        if(hasDisplayFrame){
+            printWordFrame(x, y, columnOffset); // Print the frame
+        }
     }
 
+    // Prints the frame for the word list
     private void printWordFrame(int x, int y, int columnOffset) {
         int frameRowCount = Board.ROWCOUNT + 2;
         int frameRowLength = columnOffset + 5;
@@ -195,6 +211,7 @@ public class Game {
         }
     }
 
+    // Displays the unused words from the list
     private void displayUnusedWords(int x, int y) {
         int wordSize = wordList.size();
         Console.setCursorPosition(x, y);
@@ -206,10 +223,13 @@ public class Game {
         }
     }
 
+    // Displays the highscore table
     private void displayHighScoreTable(int x, int y, int numberOfPlayersToDisplay) {
-        highScoreTable.addToEnd(user1);
+        highScoreTable.addToEnd(user1); // Adds the users first
         highScoreTable.addToEnd(user2);
         int size = highScoreTable.size();
+
+        // Sorts the highscore table using bubble sort
         Object temp;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -220,6 +240,8 @@ public class Game {
                 }
             }
         }
+
+        // Finds the longest string that will be printed, and prints the user info to the screen
         int longestString = 0;
         if (numberOfPlayersToDisplay > 0 && numberOfPlayersToDisplay < highScoreTable.size()) {
             for (int i = 0; i < numberOfPlayersToDisplay; i++) {
@@ -231,6 +253,8 @@ public class Game {
                         + ((User) highScoreTable.get(i)).getScore());
             }
         }
+
+        // Prints the frame for the highscore table
         int frameRowCount = numberOfPlayersToDisplay + 2;
         int frameRowLength = longestString + 2;
         for (int i = 0; i < frameRowCount; i++) {
@@ -254,18 +278,19 @@ public class Game {
         }
     }
 
+    // Prints the cursor at given coordinates
     private void printCursor(int px, int py) {
 
         Console.setCursorPosition(playerPos.getX() + 1, playerPos.getY() + 1);
-        if (turn) {
+        if (turn) { // Player 1's turn 
             if (puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("0")
-                    || puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("1")) {
-                Console.print("█", Console.greenonblack);
-            } else {
+                    || puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("1")) { // If wall or empty space
+                Console.print("█", Console.greenonblack); // Print green block
+            } else { // If a character
                 Console.print(puzzle.getBoard()[playerPos.getY()][playerPos.getX()].toUpperCase(),
-                        Console.blackongreen);
+                        Console.blackongreen); // Print green uppercase character
             }
-        } else {
+        } else { // If Player 2's turn
             if (puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("0")
                     || puzzle.getBoard()[playerPos.getY()][playerPos.getX()].equals("1")) {
                 Console.print("█", Console.redonblack);
@@ -830,10 +855,9 @@ public class Game {
 
     public void run() throws InterruptedException, IOException {
         if (Input.ERRORLIST.size() > 0) {
-            Input.ERRORLIST.display(Console.redonblack);
-            Console.print("Press enter to continue...");
             Console.readLine();
         }
+        Console.clear();
         menu();
         puzzle.printBoard(0, 0, true);
         displayWords(17, 0, true);
