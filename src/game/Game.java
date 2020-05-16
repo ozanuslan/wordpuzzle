@@ -854,9 +854,6 @@ public class Game {
     }
 
     public void run() throws InterruptedException, IOException {
-        if (Input.ERRORLIST.size() > 0) {
-            Console.readLine();
-        }
         Console.clear();
         menu();
         puzzle.printBoard(0, 0, true);
